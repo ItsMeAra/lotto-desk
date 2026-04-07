@@ -2,10 +2,12 @@
 
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 export function SignupForm() {
+  const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -31,7 +33,8 @@ export function SignupForm() {
       return;
     }
     if (data.session) {
-      window.location.assign("/dashboard");
+      router.push("/dashboard");
+      router.refresh();
       return;
     }
     setInfo("Check your email to confirm your account, then sign in.");

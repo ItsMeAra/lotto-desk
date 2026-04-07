@@ -2,13 +2,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Vercel/serverless: set DATABASE_URL to Supavisor *transaction* pooler (port 6543) + ?pgbouncer=true
-// Set DIRECT_URL to the direct/session connection (port 5432) for migrations & introspection.
-// Local dev: DATABASE_URL and DIRECT_URL can be the same direct string if you are not using the pooler.
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Profile {

@@ -2,11 +2,12 @@
 
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 export function LoginForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -25,10 +26,9 @@ export function LoginForm() {
       setErr(error.message);
       return;
     }
-    // Full navigation so the next request always includes auth cookies (avoids RSC 500s after client sign-in).
     const next = searchParams.get("next");
-    const dest = next?.startsWith("/") ? next : "/dashboard";
-    window.location.assign(dest);
+    router.push(next?.startsWith("/") ? next : "/dashboard");
+    router.refresh();
   }
 
   return (
@@ -36,21 +36,6 @@ export function LoginForm() {
       {searchParams.get("error") === "auth" ? (
         <p className="text-sm text-pomegranate-400" role="alert">
           Sign-in failed. Try again.
-        </p>
-      ) : null}
-      {searchParams.get("error") === "database" ? (
-        <p className="text-sm text-pomegranate-400" role="alert">
-          Database connection failed from Vercel. In Supabase: Settings → Database → use the{" "}
-          <strong>Transaction pooler</strong> URI (port <span className="font-mono">6543</span>) as{" "}
-          <code className="font-mono text-xs">DATABASE_URL</code>, with{" "}
-          <code className="font-mono text-xs">?pgbouncer=true</code> in the query string. Use the direct connection (port{" "}
-          <span className="font-mono">5432</span>) as <code className="font-mono text-xs">DIRECT_URL</code> on Vercel
-          (same values as in your local <code className="font-mono text-xs">.env</code> after updating). Then redeploy.
-        </p>
-      ) : null}
-      {searchParams.get("error") === "server" ? (
-        <p className="text-sm text-pomegranate-400" role="alert">
-          We couldn&apos;t load your dashboard. Check Vercel deployment logs for the error right after you sign in.
         </p>
       ) : null}
       {err ? (
