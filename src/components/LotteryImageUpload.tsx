@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
+import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 type Props = {
   lotteryId: string;
@@ -55,8 +56,9 @@ export function LotteryImageUpload({ lotteryId, disabled }: Props) {
         />
         <label
           htmlFor={inputId}
-          className={`btn-clay-muted ${disabled || busy ? "pointer-events-none opacity-50" : ""}`}
+          className={`btn-clay-muted inline-flex gap-2 ${disabled || busy ? "pointer-events-none opacity-50" : ""}`}
         >
+          {busy ? <ClaySpinner /> : null}
           {busy ? "Uploading…" : "Choose image file"}
         </label>
         {message ? (

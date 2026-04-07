@@ -2,6 +2,7 @@
 
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useId, useState } from "react";
+import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 type Props = {
   slug: string;
@@ -63,9 +64,10 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
   }
 
   const submitDisabled = status === "loading" || (!!siteKey && !token);
+  const loading = status === "loading";
 
   return (
-    <form id={formId} onSubmit={onSubmit} className="flex flex-col gap-4" aria-busy={status === "loading"}>
+    <form id={formId} onSubmit={onSubmit} className="flex flex-col gap-4" aria-busy={loading}>
       <input
         type="text"
         name="website"
@@ -82,6 +84,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
           id={`${formId}-fullName`}
           name="fullName"
           required
+          disabled={loading}
           autoComplete="name"
           className="clay-input"
         />
@@ -95,6 +98,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
           name="email"
           type="email"
           required
+          disabled={loading}
           autoComplete="email"
           className="clay-input"
         />
@@ -108,6 +112,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
           name="address"
           required
           rows={3}
+          disabled={loading}
           autoComplete="street-address"
           className="clay-input min-h-[5rem] resize-y"
         />
@@ -121,6 +126,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
             id={`${formId}-instagram`}
             name="instagram"
             required
+            disabled={loading}
             aria-required="true"
             autoComplete="off"
             className="clay-input"
@@ -137,6 +143,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
             name="paypal"
             type="email"
             required
+            disabled={loading}
             aria-required="true"
             autoComplete="email"
             className="clay-input"
@@ -151,8 +158,14 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
           {message}
         </p>
       ) : null}
-      <button type="submit" disabled={submitDisabled} className="btn-clay w-full justify-center">
-        {status === "loading" ? "Submitting…" : "Enter lottery"}
+      <button
+        type="submit"
+        disabled={submitDisabled}
+        aria-busy={loading}
+        className="btn-clay inline-flex w-full justify-center gap-2"
+      >
+        {loading ? <ClaySpinner /> : null}
+        {loading ? "Submitting…" : "Enter lottery"}
       </button>
     </form>
   );

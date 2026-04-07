@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
+import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 export function NewLotteryForm() {
   const router = useRouter();
@@ -32,8 +33,8 @@ export function NewLotteryForm() {
       body: JSON.stringify(body),
     });
     const data = (await res.json().catch(() => ({}))) as { lottery?: { id: string }; error?: unknown };
-    setBusy(false);
     if (!res.ok || !data.lottery) {
+      setBusy(false);
       setErr("Could not create lottery");
       console.error(data.error);
       return;
@@ -53,13 +54,19 @@ export function NewLotteryForm() {
         <label htmlFor="new-lottery-title" className="clay-label">
           Title
         </label>
-        <input id="new-lottery-title" name="title" required className="clay-input" />
+        <input id="new-lottery-title" name="title" required disabled={busy} className="clay-input" />
       </div>
       <div>
         <label htmlFor="new-lottery-desc" className="clay-label">
           Description
         </label>
-        <textarea id="new-lottery-desc" name="description" rows={4} className="clay-input min-h-[6rem] resize-y" />
+        <textarea
+          id="new-lottery-desc"
+          name="description"
+          rows={4}
+          disabled={busy}
+          className="clay-input min-h-[6rem] resize-y"
+        />
       </div>
       <p className="text-base text-warm-silver">
         After creating, upload an image on the next screen before entries can open.
@@ -70,14 +77,26 @@ export function NewLotteryForm() {
         </legend>
         <div className="flex flex-col gap-3" role="group" aria-labelledby={fieldsetId}>
           <label className="flex cursor-pointer items-start gap-3 text-base font-normal text-clay-black">
-            <input type="checkbox" name="collectInstagram" value="on" className="mt-1 size-4 rounded border-input-border" />
+            <input
+              type="checkbox"
+              name="collectInstagram"
+              value="on"
+              disabled={busy}
+              className="mt-1 size-4 rounded border-input-border"
+            />
             <span>
               Collect Instagram{" "}
               <span className="text-warm-silver">(required on public form when checked)</span>
             </span>
           </label>
           <label className="flex cursor-pointer items-start gap-3 text-base font-normal text-clay-black">
-            <input type="checkbox" name="collectPaypal" value="on" className="mt-1 size-4 rounded border-input-border" />
+            <input
+              type="checkbox"
+              name="collectPaypal"
+              value="on"
+              disabled={busy}
+              className="mt-1 size-4 rounded border-input-border"
+            />
             <span>
               Collect PayPal email{" "}
               <span className="text-warm-silver">(required on public form when checked)</span>
@@ -90,14 +109,14 @@ export function NewLotteryForm() {
           <label htmlFor="new-opens" className="clay-label">
             Opens (optional)
           </label>
-          <input id="new-opens" name="opensAt" type="datetime-local" className="clay-input" />
+          <input id="new-opens" name="opensAt" type="datetime-local" disabled={busy} className="clay-input" />
           <p className="mt-1 text-xs text-warm-silver">Auto-opens at this time once an image is uploaded.</p>
         </div>
         <div>
           <label htmlFor="new-closes" className="clay-label">
             Closes (optional)
           </label>
-          <input id="new-closes" name="closesAt" type="datetime-local" className="clay-input" />
+          <input id="new-closes" name="closesAt" type="datetime-local" disabled={busy} className="clay-input" />
         </div>
       </div>
       <div>
@@ -111,10 +130,12 @@ export function NewLotteryForm() {
           min={1}
           max={100}
           defaultValue={1}
+          disabled={busy}
           className="clay-input max-w-[8rem]"
         />
       </div>
-      <button type="submit" disabled={busy} className="btn-clay self-start">
+      <button type="submit" disabled={busy} aria-busy={busy} className="btn-clay inline-flex gap-2 self-start">
+        {busy ? <ClaySpinner /> : null}
         {busy ? "Creating…" : "Create lottery"}
       </button>
     </form>

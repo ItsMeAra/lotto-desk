@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 type Lottery = {
   id: string;
@@ -59,6 +60,7 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
   }
 
   const locked = lottery.status !== "DRAFT" && lottery.status !== "OPEN";
+  const fieldsDisabled = locked || busy;
 
   return (
     <form onSubmit={onSubmit} className="clay-card-dashed flex flex-col gap-4 p-6 sm:p-8">
@@ -77,7 +79,7 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
           name="title"
           defaultValue={lottery.title}
           required
-          disabled={locked}
+          disabled={fieldsDisabled}
           className="clay-input"
         />
       </div>
@@ -90,7 +92,7 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
           name="description"
           defaultValue={lottery.description}
           rows={4}
-          disabled={locked}
+          disabled={fieldsDisabled}
           className="clay-input min-h-[6rem] resize-y"
         />
       </div>
@@ -104,12 +106,12 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
           type="url"
           defaultValue={lottery.imageUrl ?? ""}
           placeholder="https://…"
-          disabled={locked}
+          disabled={fieldsDisabled}
           className="clay-input"
         />
         <p className="mt-1 text-xs text-warm-silver">Or use file upload above. URL must be https.</p>
       </div>
-      <fieldset disabled={locked} className="min-w-0 space-y-3 border-0 p-0">
+      <fieldset disabled={fieldsDisabled} className="min-w-0 space-y-3 border-0 p-0">
         <legend className="clay-label mb-1">Public entry form</legend>
         <div className="flex flex-col gap-3">
           <label className="flex cursor-pointer items-start gap-3 text-base text-clay-black">
@@ -148,7 +150,7 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
             name="opensAt"
             type="datetime-local"
             defaultValue={toInputDate(lottery.opensAt)}
-            disabled={locked}
+            disabled={fieldsDisabled}
             className="clay-input"
           />
           <p className="mt-1 text-xs text-warm-silver">
@@ -164,7 +166,7 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
             name="closesAt"
             type="datetime-local"
             defaultValue={toInputDate(lottery.closesAt)}
-            disabled={locked}
+            disabled={fieldsDisabled}
             className="clay-input"
           />
         </div>
@@ -180,12 +182,13 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
           min={1}
           max={100}
           defaultValue={lottery.winnerCount}
-          disabled={locked}
+          disabled={fieldsDisabled}
           className="clay-input max-w-[8rem]"
         />
       </div>
       {!locked ? (
-        <button type="submit" disabled={busy} aria-busy={busy} className="btn-clay self-start">
+        <button type="submit" disabled={busy} aria-busy={busy} className="btn-clay inline-flex gap-2 self-start">
+          {busy ? <ClaySpinner /> : null}
           {busy ? "Saving…" : "Save changes"}
         </button>
       ) : (

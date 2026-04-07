@@ -2,11 +2,10 @@
 
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 export function SignupForm() {
-  const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -32,8 +31,7 @@ export function SignupForm() {
       return;
     }
     if (data.session) {
-      router.push("/dashboard");
-      router.refresh();
+      window.location.assign("/dashboard");
       return;
     }
     setInfo("Check your email to confirm your account, then sign in.");
@@ -60,6 +58,7 @@ export function SignupForm() {
           name="email"
           type="email"
           required
+          disabled={busy}
           autoComplete="email"
           className="clay-input"
         />
@@ -74,11 +73,13 @@ export function SignupForm() {
           type="password"
           required
           minLength={8}
+          disabled={busy}
           autoComplete="new-password"
           className="clay-input"
         />
       </div>
-      <button type="submit" disabled={busy} className="btn-clay w-full justify-center">
+      <button type="submit" disabled={busy} aria-busy={busy} className="btn-clay inline-flex w-full justify-center gap-2">
+        {busy ? <ClaySpinner /> : null}
         {busy ? "Creating account…" : "Create account"}
       </button>
       <p className="text-center text-base text-warm-silver">

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 type Status = "DRAFT" | "OPEN" | "CLOSED" | "DRAWN";
 
@@ -37,11 +38,12 @@ export function LotteryManageActions({
   scheduledOpensInFuture,
 }: Props) {
   const router = useRouter();
-  const [busy, setBusy] = useState(false);
+  const [pending, setPending] = useState<null | "open" | "close" | "draw">(null);
   const [err, setErr] = useState<string | null>(null);
+  const busy = pending !== null;
 
   async function patch(body: object) {
-    setBusy(true);
+    setPending("open");
     setErr(null);
     const res = await fetch(`/api/lotteries/${lotteryId}`, {
       method: "PATCH",
@@ -49,7 +51,7 @@ export function LotteryManageActions({
       body: JSON.stringify(body),
     });
     const data = await res.json().catch(() => ({}));
-    setBusy(false);
+    setPending(null);
     if (!res.ok) {
       setErr(apiErrorMessage(data));
       return;
@@ -58,11 +60,11 @@ export function LotteryManageActions({
   }
 
   async function closeLottery() {
-    setBusy(true);
+    setPending("close");
     setErr(null);
     const res = await fetch(`/api/lotteries/${lotteryId}/close`, { method: "POST" });
     const data = await res.json().catch(() => ({}));
-    setBusy(false);
+    setPending(null);
     if (!res.ok) {
       setErr(apiErrorMessage(data));
       return;
@@ -72,7 +74,7 @@ export function LotteryManageActions({
 
   async function drawWinners() {
     if (!confirm(`Pick up to ${configuredWinners} winner(s) from ${entryCount} entries?`)) return;
-    setBusy(true);
+    setPending("draw");
     setErr(null);
     const res = await fetch(`/api/lotteries/${lotteryId}/draw`, {
       method: "POST",
@@ -80,7 +82,7 @@ export function LotteryManageActions({
       body: JSON.stringify({}),
     });
     const data = await res.json().catch(() => ({}));
-    setBusy(false);
+    setPending(null);
     if (!res.ok) {
       setErr(apiErrorMessage(data));
       return;
@@ -120,24 +122,40 @@ export function LotteryManageActions({
             type="button"
             disabled={busy || !hasImage}
             onClick={() => patch({ status: "OPEN" })}
+            aria-busy={pending === "open"}
             aria-describedby={
               [!hasImage ? publishHintId : "", scheduledOpensInFuture ? scheduleHintId : ""]
                 .filter(Boolean)
                 .join(" ") || undefined
             }
-            className="btn-clay-matcha"
+            className="btn-clay-matcha items-center gap-2 text-sm"
           >
-            Open entries now
+            {pending === "open" ? <ClaySpinner variant="onDark" /> : null}
+            {pending === "open" ? "Opening…" : "Open entries now"}
           </button>
         ) : null}
         {status === "OPEN" ? (
-          <button type="button" disabled={busy} onClick={closeLottery} className="btn-clay-lemon">
-            Close entries
+          <button
+            type="button"
+            disabled={busy}
+            aria-busy={pending === "close"}
+            onClick={closeLottery}
+            className="btn-clay-lemon items-center gap-2 text-sm"
+          >
+            {pending === "close" ? <ClaySpinner /> : null}
+            {pending === "close" ? "Closing…" : "Close entries"}
           </button>
         ) : null}
         {status === "CLOSED" && entryCount > 0 ? (
-          <button type="button" disabled={busy} onClick={drawWinners} className="btn-clay-ube">
-            Draw {configuredWinners} winner{configuredWinners !== 1 ? "s" : ""}
+          <button
+            type="button"
+            disabled={busy}
+            aria-busy={pending === "draw"}
+            onClick={drawWinners}
+            className="btn-clay-ube items-center gap-2 text-sm"
+          >
+            {pending === "draw" ? <ClaySpinner variant="onDark" /> : null}
+            {pending === "draw" ? "Drawing…" : `Draw ${configuredWinners} winner${configuredWinners !== 1 ? "s" : ""}`}
           </button>
         ) : null}
         <a
