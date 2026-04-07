@@ -38,10 +38,19 @@ export function LoginForm() {
           Sign-in failed. Try again.
         </p>
       ) : null}
+      {searchParams.get("error") === "database" ? (
+        <p className="text-sm text-pomegranate-400" role="alert">
+          Database connection failed from Vercel. In Supabase: Settings → Database → use the{" "}
+          <strong>Transaction pooler</strong> URI (port <span className="font-mono">6543</span>) as{" "}
+          <code className="font-mono text-xs">DATABASE_URL</code>, with{" "}
+          <code className="font-mono text-xs">?pgbouncer=true</code> in the query string. Use the direct connection (port{" "}
+          <span className="font-mono">5432</span>) as <code className="font-mono text-xs">DIRECT_URL</code> on Vercel
+          (same values as in your local <code className="font-mono text-xs">.env</code> after updating). Then redeploy.
+        </p>
+      ) : null}
       {searchParams.get("error") === "server" ? (
         <p className="text-sm text-pomegranate-400" role="alert">
-          We couldn&apos;t load your dashboard (often a database connection on Vercel). Check deployment logs and{" "}
-          <code className="font-mono text-xs">DATABASE_URL</code>.
+          We couldn&apos;t load your dashboard. Check Vercel deployment logs for the error right after you sign in.
         </p>
       ) : null}
       {err ? (

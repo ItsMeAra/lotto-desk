@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { DashboardNav } from "@/components/DashboardNav";
 import { requireOrganizer } from "@/lib/auth";
@@ -20,6 +21,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
   } catch (e) {
     if (isRedirectError(e)) throw e;
     console.error("[dashboard] requireOrganizer failed:", e);
-    redirect("/login?error=server");
+    const prismaDb =
+      e instanceof Prisma.PrismaClientInitializationError ||
+      (e instanceof Prisma.PrismaClientKnownRequestError &&
+        ["P1001", "P1000", "P1017", "P2024"].includes(e.code));
+    redirect(prismaDb ? "/login?error=database" : "/login?error=server");
   }
 }
