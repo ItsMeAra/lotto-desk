@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id        String    @id @db.Uuid
+  email     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  lotteries Lottery[]
+  auditLogs AuditLog[]
+}
+
+enum LotteryStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  DRAWN
+}
+
+model Lottery {
+  id                 String                @id @default(cuid())
+  organizerId        String                @db.Uuid
+  organizer          Profile               @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  title              String
+  description        String                @default("")
+  imageUrl           String?
+  slug               String                @unique
+  status             LotteryStatus         @default(DRAFT)
+  opensAt            DateTime?
+  closesAt           DateTime?
+  winnerCount        Int                   @default(1)
+  collectInstagram   Boolean               @default(false)
+  collectPaypal      Boolean               @default(false)
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  entries            Entry[]
+  winners            Winner[]
+  auditLogs          AuditLog[]
+  blockedAttempts    BlockedEntryAttempt[]
+}
+
+model Entry {
+  id            String   @id @default(cuid())
+  lotteryId     String
+  lottery       Lottery  @relation(fields: [lotteryId], references: [id], onDelete: Cascade)
+  fullName      String
+  email         String
+  address       String
+  instagram     String?
+  paypal        String?
+  dedupeKey     String
+  normEmail     String
+  normName      String
+  normAddress   String
+  normInstagram String?
+  normPaypal    String?
+  createdAt     DateTime @default(now())
+  winners       Winner[]
+
+  @@unique([lotteryId, dedupeKey])
+  @@index([lotteryId])
+  @@index([lotteryId, normEmail])
+}
+
+model Winner {
+  id        String   @id @default(cuid())
+  lotteryId String
+  lottery   Lottery  @relation(fields: [lotteryId], references: [id], onDelete: Cascade)
+  entryId   String
+  entry     Entry    @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([lotteryId, entryId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String   @db.Uuid
+  user      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lotteryId String?
+  lottery   Lottery? @relation(fields: [lotteryId], references: [id], onDelete: SetNull)
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([lotteryId])
+}
+
+model BlockedEntryAttempt {
+  id        String   @id @default(cuid())
+  lotteryId String
+  lottery   Lottery  @relation(fields: [lotteryId], references: [id], onDelete: Cascade)
+  dedupeKey String?
+  email     String?
+  ip        String?
+  reason    String
+  createdAt DateTime @default(now())
+
+  @@index([lotteryId])
+}
