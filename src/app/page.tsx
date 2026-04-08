@@ -23,7 +23,7 @@ export default function HomePage() {
         <p className="font-mono text-xs font-normal uppercase tracking-[0.0675rem] text-warm-silver">
           For artists &amp; indie shops
         </p>
-        <h1 className="font-display mt-4 text-balance-safe text-4xl font-bold leading-none tracking-tight text-clay-black sm:text-5xl md:text-6xl">
+        <h1 className="font-display mt-4 text-balance-safe text-4xl font-normal leading-[0.85] tracking-tight text-clay-black sm:text-5xl md:text-6xl">
           Run fair lotteries for your drops
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-pretty text-lg leading-relaxed text-warm-silver">

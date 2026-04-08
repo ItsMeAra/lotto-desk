@@ -14,7 +14,7 @@ declare global {
 }
 
 /**
- * Vanta.js HALO — ambient WebGL behind the hero on the deep purple surface (#1f1633).
+ * Vanta.js HALO — soft ambient halos on a light canvas (Wise-inspired greens).
  * Skipped when user prefers reduced motion.
  */
 export function VantaHaloBackground() {
@@ -49,15 +49,15 @@ export function VantaHaloBackground() {
         minHeight: 200,
         scale: 1,
         scaleMobile: 1.15,
-        backgroundColor: 0x1f1633,
+        backgroundColor: 0xf7f8f6,
         backgroundAlpha: 1,
-        baseColor: 0x6a5fc1,
-        color2: 0xc2ef4e,
-        amplitudeFactor: 0.62,
-        ringFactor: 1.15,
-        rotationFactor: 0.75,
+        baseColor: 0x9fe870,
+        color2: 0xe2f6d5,
+        amplitudeFactor: 0.5,
+        ringFactor: 1.1,
+        rotationFactor: 0.65,
         size: 1,
-        speed: 0.58,
+        speed: 0.45,
         xOffset: 0,
         yOffset: 0.02,
         mouseEase: false,

@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Rubik, Syne } from "next/font/google";
+import { Archivo_Black, Inter } from "next/font/google";
 import "./globals.css";
 
-const rubik = Rubik({
-  variable: "--font-rubik",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-const syne = Syne({
-  variable: "--font-syne",
+const archivoBlack = Archivo_Black({
+  variable: "--font-archivo",
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${rubik.variable} ${syne.variable} h-full`}>
+    <html lang="en" className={`${inter.variable} ${archivoBlack.variable} h-full`}>
       <body className="min-h-full flex flex-col font-sans antialiased bg-cream text-clay-black">
         {children}
       </body>
