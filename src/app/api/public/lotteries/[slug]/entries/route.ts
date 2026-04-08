@@ -45,7 +45,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ slug: stri
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
-  const { fullName, email, address, instagram, paypal, website, turnstileToken } = parsed.data;
+  const { fullName, email, address, country, instagram, paypal, website, turnstileToken } = parsed.data;
   if (website && website.length > 0) {
     return NextResponse.json({ error: "Invalid submission" }, { status: 400 });
   }
@@ -58,7 +58,8 @@ export async function POST(request: Request, ctx: { params: Promise<{ slug: stri
   const entryFieldError = validateEntryFieldsForLottery(
     lottery,
     instagram,
-    paypal
+    paypal,
+    country
   );
   if (entryFieldError) {
     return NextResponse.json({ error: entryFieldError }, { status: 400 });
@@ -67,9 +68,10 @@ export async function POST(request: Request, ctx: { params: Promise<{ slug: stri
   const normEmail = normalizeEmail(email);
   const normName = normalizeName(fullName);
   const normAddress = normalizeAddress(address);
+  const normCountry = country.toUpperCase();
   const normInstagram = normalizeOptionalHandle(instagram);
   const normPaypal = normalizeOptionalHandle(paypal);
-  const dedupeKey = buildDedupeKey(normEmail, normName, normAddress);
+  const dedupeKey = buildDedupeKey(normEmail, normName, normAddress, normCountry);
 
   try {
     const entry = await prisma.entry.create({
@@ -78,12 +80,14 @@ export async function POST(request: Request, ctx: { params: Promise<{ slug: stri
         fullName: fullName.trim(),
         email: email.trim(),
         address: address.trim(),
+        country: country.toUpperCase(),
         instagram: instagram?.trim() || null,
         paypal: paypal?.trim() || null,
         dedupeKey,
         normEmail,
         normName,
         normAddress,
+        normCountry,
         normInstagram,
         normPaypal,
       },

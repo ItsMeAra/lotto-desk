@@ -15,6 +15,9 @@ export const lotteryCreateSchema = z.object({
   winnerCount: z.coerce.number().int().min(1).max(100).optional().default(1),
   collectInstagram: z.boolean().optional().default(false),
   collectPaypal: z.boolean().optional().default(false),
+  shippingPolicy: z.enum(["ANY", "US_ONLY", "ALLOW_LIST", "BLOCK_LIST"]).optional().default("ANY"),
+  allowedCountries: z.array(z.string().length(2)).optional().default([]),
+  blockedCountries: z.array(z.string().length(2)).optional().default([]),
 });
 
 export const lotteryUpdateSchema = lotteryCreateSchema.partial().extend({
@@ -25,6 +28,12 @@ export const entrySubmitSchema = z.object({
   fullName: z.string().min(1).max(200),
   email: z.string().email().max(320),
   address: z.string().min(1).max(2000),
+  country: z
+    .string()
+    .min(2)
+    .max(2)
+    .transform((v) => v.toUpperCase())
+    .refine((v) => /^[A-Z]{2}$/.test(v), "Invalid country"),
   instagram: z.string().max(200).optional().nullable(),
   paypal: z.string().max(200).optional().nullable(),
   website: z.string().max(10).optional(),
@@ -36,9 +45,16 @@ export const drawWinnersSchema = z.object({
 });
 
 export function validateEntryFieldsForLottery(
-  lottery: { collectInstagram: boolean; collectPaypal: boolean },
+  lottery: {
+    collectInstagram: boolean;
+    collectPaypal: boolean;
+    shippingPolicy: "ANY" | "US_ONLY" | "ALLOW_LIST" | "BLOCK_LIST";
+    allowedCountries: string[];
+    blockedCountries: string[];
+  },
   instagram: string | null | undefined,
-  paypal: string | null | undefined
+  paypal: string | null | undefined,
+  country: string
 ): string | null {
   if (lottery.collectInstagram) {
     const v = instagram?.trim();
@@ -49,6 +65,20 @@ export function validateEntryFieldsForLottery(
     if (!v) return "PayPal email is required for this lottery.";
     const emailCheck = z.string().email().safeParse(v);
     if (!emailCheck.success) return "Enter a valid PayPal email address.";
+  }
+  const c = country.toUpperCase();
+  if (lottery.shippingPolicy === "US_ONLY" && c !== "US") {
+    return "This lottery is limited to United States shipping addresses.";
+  }
+  if (lottery.shippingPolicy === "ALLOW_LIST") {
+    if (!lottery.allowedCountries.map((x) => x.toUpperCase()).includes(c)) {
+      return "This lottery is not available in your country.";
+    }
+  }
+  if (lottery.shippingPolicy === "BLOCK_LIST") {
+    if (lottery.blockedCountries.map((x) => x.toUpperCase()).includes(c)) {
+      return "This lottery is not available in your country.";
+    }
   }
   return null;
 }

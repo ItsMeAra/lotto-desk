@@ -61,6 +61,9 @@ export async function POST(request: Request) {
     winnerCount,
     collectInstagram,
     collectPaypal,
+    shippingPolicy,
+    allowedCountries,
+    blockedCountries,
   } = parsed.data;
   const opens = opensAt && opensAt !== "" ? new Date(opensAt) : null;
   const closes = closesAt && closesAt !== "" ? new Date(closesAt) : null;
@@ -84,6 +87,9 @@ export async function POST(request: Request) {
       winnerCount,
       collectInstagram,
       collectPaypal,
+      shippingPolicy,
+      allowedCountries,
+      blockedCountries,
       status: "DRAFT",
     },
   });

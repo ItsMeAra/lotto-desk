@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { LotteryEditForm } from "@/components/LotteryEditForm";
 import { LotteryManageActions } from "@/components/LotteryManageActions";
 import { requireOrganizer } from "@/lib/auth";
@@ -18,6 +19,11 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
   const { id } = await params;
   const { user } = await requireOrganizer();
   if (!user) return null;
+
+  const h = await headers();
+  const proto = h.get("x-forwarded-proto") ?? "http";
+  const host = h.get("x-forwarded-host") ?? h.get("host");
+  const origin = host ? `${proto}://${host}` : null;
 
   const lotteryInclude = {
     _count: { select: { entries: true, winners: true, blockedAttempts: true } },
@@ -56,7 +62,15 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
         <div>
           <h1 className="text-3xl font-semibold tracking-tight text-clay-black">{lottery.title}</h1>
           <p className="mt-2 font-mono text-xs text-warm-silver">
-            Public URL: /l/{lottery.slug}
+            Public URL:{" "}
+            <a
+              href={origin ? `${origin}/l/${lottery.slug}` : `/l/${lottery.slug}`}
+              className="link-clay"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {origin ? `${origin}/l/${lottery.slug}` : `/l/${lottery.slug}`}
+            </a>
           </p>
         </div>
         <span className="inline-flex items-center rounded-[11px] border border-oat bg-oat-light/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.0675rem] text-clay-black">
@@ -106,6 +120,9 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
               status: lottery.status,
               collectInstagram: lottery.collectInstagram,
               collectPaypal: lottery.collectPaypal,
+              shippingPolicy: lottery.shippingPolicy,
+              allowedCountries: lottery.allowedCountries,
+              blockedCountries: lottery.blockedCountries,
             }}
           />
         </div>
@@ -122,15 +139,44 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
           <h2 className="text-xl font-semibold tracking-tight text-clay-black">Winners</h2>
           <ul className="mt-4 space-y-2">
             {lottery.winners.map((w, i) => (
+              (() => {
+                const instagramUser = (w.entry.instagram ?? "").trim().replace(/^@+/, "");
+                const instagramUrl = instagramUser ? `https://instagram.com/${instagramUser}` : null;
+                const instagramLabel = instagramUrl ? `instagram.com/${instagramUser}` : "—";
+                return (
               <li
                 key={w.id}
-                className="rounded-[12px] border border-oat bg-card px-4 py-3 text-sm shadow-[var(--shadow-clay)]"
+                className="rounded-[12px] border border-oat bg-card px-4 py-4 text-sm shadow-[var(--shadow-clay)]"
               >
-                <span className="font-medium text-clay-black">
+                <p className="font-medium text-clay-black">
                   #{i + 1} {w.entry.fullName}
-                </span>
-                <span className="text-warm-silver"> — {w.entry.email}</span>
+                </p>
+                <p className="mt-1 text-warm-silver">{w.entry.email}</p>
+                <dl className="mt-3 space-y-1 text-sm">
+                  <div className="grid grid-cols-[7.5rem_1fr] gap-2">
+                    <dt className="font-medium text-clay-black">Address</dt>
+                    <dd className="whitespace-pre-wrap break-words text-warm-silver">{w.entry.address}</dd>
+                  </div>
+                  <div className="grid grid-cols-[7.5rem_1fr] gap-2">
+                    <dt className="font-medium text-clay-black">Instagram</dt>
+                    <dd className="break-words text-warm-silver">
+                      {instagramUrl ? (
+                        <a href={instagramUrl} className="link-clay" target="_blank" rel="noreferrer">
+                          {instagramLabel}
+                        </a>
+                      ) : (
+                        "—"
+                      )}
+                    </dd>
+                  </div>
+                  <div className="grid grid-cols-[7.5rem_1fr] gap-2">
+                    <dt className="font-medium text-clay-black">PayPal</dt>
+                    <dd className="break-words text-warm-silver">{w.entry.paypal || "—"}</dd>
+                  </div>
+                </dl>
               </li>
+                );
+              })()
             ))}
           </ul>
         </section>

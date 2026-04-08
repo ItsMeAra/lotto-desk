@@ -25,6 +25,13 @@ enum LotteryStatus {
   DRAWN
 }
 
+enum ShippingPolicy {
+  ANY
+  US_ONLY
+  ALLOW_LIST
+  BLOCK_LIST
+}
+
 model Lottery {
   id                 String                @id @default(cuid())
   organizerId        String                @db.Uuid
@@ -39,6 +46,9 @@ model Lottery {
   winnerCount        Int                   @default(1)
   collectInstagram   Boolean               @default(false)
   collectPaypal      Boolean               @default(false)
+  shippingPolicy     ShippingPolicy        @default(ANY)
+  allowedCountries   String[]              @default([])
+  blockedCountries   String[]              @default([])
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @updatedAt
   entries            Entry[]
@@ -54,12 +64,14 @@ model Entry {
   fullName      String
   email         String
   address       String
+  country       String   @default("US")
   instagram     String?
   paypal        String?
   dedupeKey     String
   normEmail     String
   normName      String
   normAddress   String
+  normCountry   String   @default("US")
   normInstagram String?
   normPaypal    String?
   createdAt     DateTime @default(now())

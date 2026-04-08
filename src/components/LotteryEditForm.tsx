@@ -14,6 +14,9 @@ type Lottery = {
   status: string;
   collectInstagram: boolean;
   collectPaypal: boolean;
+  shippingPolicy?: "ANY" | "US_ONLY" | "ALLOW_LIST" | "BLOCK_LIST";
+  allowedCountries?: string[];
+  blockedCountries?: string[];
 };
 
 function toInputDate(iso: string | null): string {
@@ -28,11 +31,24 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
+  function parseCountryList(value: FormDataEntryValue | null): string[] {
+    const raw = String(value ?? "")
+      .split(/[,\\n]/g)
+      .map((s) => s.trim().toUpperCase())
+      .filter(Boolean);
+    return Array.from(new Set(raw)).filter((c) => /^[A-Z]{2}$/.test(c));
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
     setErr(null);
     const fd = new FormData(e.currentTarget);
+    const shippingPolicy = String(fd.get("shippingPolicy") || lottery.shippingPolicy || "ANY");
+    const allowedCountries =
+      shippingPolicy === "ALLOW_LIST" ? parseCountryList(fd.get("allowedCountries")) : [];
+    const blockedCountries =
+      shippingPolicy === "BLOCK_LIST" ? parseCountryList(fd.get("blockedCountries")) : [];
     const body = {
       title: String(fd.get("title")),
       description: String(fd.get("description")),
@@ -41,6 +57,9 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
       winnerCount: Number(fd.get("winnerCount")),
       collectInstagram: fd.get("collectInstagram") === "on",
       collectPaypal: fd.get("collectPaypal") === "on",
+      shippingPolicy,
+      allowedCountries,
+      blockedCountries,
     };
     const res = await fetch(`/api/lotteries/${lottery.id}`, {
       method: "PATCH",
@@ -123,6 +142,59 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
           </label>
         </div>
       </fieldset>
+
+      <fieldset disabled={fieldsDisabled} className="min-w-0 space-y-3 border-0 p-0">
+        <legend className="clay-label mb-1">Shipping restrictions</legend>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="sm:col-span-2">
+            <label htmlFor={`ship-policy-${lottery.id}`} className="clay-label">
+              Eligible countries
+            </label>
+            <select
+              id={`ship-policy-${lottery.id}`}
+              name="shippingPolicy"
+              defaultValue={lottery.shippingPolicy ?? "ANY"}
+              className="clay-input"
+            >
+              <option value="ANY">International (any country)</option>
+              <option value="US_ONLY">United States only</option>
+              <option value="ALLOW_LIST">Allow only selected countries…</option>
+              <option value="BLOCK_LIST">Block certain countries…</option>
+            </select>
+            <p className="mt-2 text-sm text-warm-silver">
+              Entrants must select a shipping country; submissions are blocked if they don&rsquo;t match this policy.
+            </p>
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor={`ship-allow-${lottery.id}`} className="clay-label">
+              Allowed countries (ISO codes)
+            </label>
+            <textarea
+              id={`ship-allow-${lottery.id}`}
+              name="allowedCountries"
+              defaultValue={(lottery.allowedCountries ?? []).join(", ")}
+              rows={2}
+              placeholder="US, CA, GB"
+              className="clay-input min-h-[4rem] resize-y"
+            />
+            <p className="mt-1 text-xs text-warm-silver">Used only when policy is “Allow only selected countries”.</p>
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor={`ship-block-${lottery.id}`} className="clay-label">
+              Blocked countries (ISO codes)
+            </label>
+            <textarea
+              id={`ship-block-${lottery.id}`}
+              name="blockedCountries"
+              defaultValue={(lottery.blockedCountries ?? []).join(", ")}
+              rows={2}
+              placeholder="RU, BY"
+              className="clay-input min-h-[4rem] resize-y"
+            />
+            <p className="mt-1 text-xs text-warm-silver">Used only when policy is “Block certain countries”.</p>
+          </div>
+        </div>
+      </fieldset>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor={`opens-${lottery.id}`} className="clay-label">
@@ -170,7 +242,7 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
         />
       </div>
       {!locked ? (
-        <button type="submit" disabled={busy} aria-busy={busy} className="btn-clay inline-flex gap-2 self-start">
+        <button type="submit" disabled={busy} aria-busy={busy} className="btn-clay inline-flex gap-2 self-start px-6 py-3">
           {busy ? <ClaySpinner /> : null}
           {busy ? "Saving…" : "Save changes"}
         </button>

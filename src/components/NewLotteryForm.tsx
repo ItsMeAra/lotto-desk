@@ -10,6 +10,15 @@ export function NewLotteryForm() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
+  function parseCountryList(value: FormDataEntryValue | null): string[] {
+    const raw = String(value ?? "")
+      .split(/[,\\n]/g)
+      .map((s) => s.trim().toUpperCase())
+      .filter(Boolean);
+    // unique + keep only ISO-ish codes
+    return Array.from(new Set(raw)).filter((c) => /^[A-Z]{2}$/.test(c));
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
@@ -17,6 +26,11 @@ export function NewLotteryForm() {
     const fd = new FormData(e.currentTarget);
     const opensRaw = String(fd.get("opensAt") || "");
     const closesRaw = String(fd.get("closesAt") || "");
+    const shippingPolicy = String(fd.get("shippingPolicy") || "ANY");
+    const allowedCountries =
+      shippingPolicy === "ALLOW_LIST" ? parseCountryList(fd.get("allowedCountries")) : [];
+    const blockedCountries =
+      shippingPolicy === "BLOCK_LIST" ? parseCountryList(fd.get("blockedCountries")) : [];
     const body = {
       title: String(fd.get("title")),
       description: String(fd.get("description") || ""),
@@ -26,6 +40,9 @@ export function NewLotteryForm() {
       winnerCount: Number(fd.get("winnerCount") || 1),
       collectInstagram: fd.get("collectInstagram") === "on",
       collectPaypal: fd.get("collectPaypal") === "on",
+      shippingPolicy,
+      allowedCountries,
+      blockedCountries,
     };
     const res = await fetch("/api/lotteries", {
       method: "POST",
@@ -102,6 +119,52 @@ export function NewLotteryForm() {
               <span className="text-warm-silver">(required on public form when checked)</span>
             </span>
           </label>
+        </div>
+      </fieldset>
+
+      <fieldset disabled={busy} className="min-w-0 space-y-3 border-0 p-0">
+        <legend className="clay-label mb-1">Shipping restrictions</legend>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="sm:col-span-2">
+            <label htmlFor="new-shipping-policy" className="clay-label">
+              Eligible countries
+            </label>
+            <select id="new-shipping-policy" name="shippingPolicy" defaultValue="ANY" className="clay-input">
+              <option value="ANY">International (any country)</option>
+              <option value="US_ONLY">United States only</option>
+              <option value="ALLOW_LIST">Allow only selected countries…</option>
+              <option value="BLOCK_LIST">Block certain countries…</option>
+            </select>
+            <p className="mt-2 text-sm text-warm-silver">
+              Country is collected on the entry form and validated server-side.
+            </p>
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="new-allowed-countries" className="clay-label">
+              Allowed countries (ISO codes, comma or newline separated)
+            </label>
+            <textarea
+              id="new-allowed-countries"
+              name="allowedCountries"
+              rows={2}
+              placeholder="US, CA, GB"
+              className="clay-input min-h-[4rem] resize-y"
+            />
+            <p className="mt-1 text-xs text-warm-silver">Used only when policy is “Allow only selected countries”.</p>
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="new-blocked-countries" className="clay-label">
+              Blocked countries (ISO codes, comma or newline separated)
+            </label>
+            <textarea
+              id="new-blocked-countries"
+              name="blockedCountries"
+              rows={2}
+              placeholder="RU, BY"
+              className="clay-input min-h-[4rem] resize-y"
+            />
+            <p className="mt-1 text-xs text-warm-silver">Used only when policy is “Block certain countries”.</p>
+          </div>
         </div>
       </fieldset>
       <div className="grid gap-4 sm:grid-cols-2">

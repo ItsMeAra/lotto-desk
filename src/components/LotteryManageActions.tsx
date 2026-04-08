@@ -38,8 +38,9 @@ export function LotteryManageActions({
   scheduledOpensInFuture,
 }: Props) {
   const router = useRouter();
-  const [pending, setPending] = useState<null | "open" | "close" | "draw">(null);
+  const [pending, setPending] = useState<null | "open" | "close" | "draw" | "delete">(null);
   const [err, setErr] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const busy = pending !== null;
 
   async function patch(body: object) {
@@ -90,16 +91,63 @@ export function LotteryManageActions({
     router.refresh();
   }
 
+  async function deleteLottery() {
+    if (
+      !confirm(
+        "Delete this lottery permanently? This removes entries, winners, and audit-linked data for this lottery."
+      )
+    ) {
+      return;
+    }
+    setPending("delete");
+    setErr(null);
+    const res = await fetch(`/api/lotteries/${lotteryId}`, { method: "DELETE" });
+    const data = await res.json().catch(() => ({}));
+    setPending(null);
+    if (!res.ok) {
+      setErr(apiErrorMessage(data));
+      return;
+    }
+    router.push("/dashboard/lotteries");
+    router.refresh();
+  }
+
   function copyPublicLink() {
     const url = `${window.location.origin}/l/${slug}`;
-    void navigator.clipboard.writeText(url);
+    void navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    });
   }
 
   const publishHintId = "lottery-publish-image-hint";
   const scheduleHintId = "lottery-schedule-hint";
+  const publicPath = `/l/${slug}`;
 
   return (
     <div className="flex flex-col gap-3">
+      <div className="clay-card-dashed flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <p className="clay-label mb-1">Public link</p>
+          <a
+            href={publicPath}
+            target="_blank"
+            rel="noreferrer"
+            className="link-clay block max-w-full truncate text-sm"
+            title={publicPath}
+          >
+            {publicPath}
+          </a>
+        </div>
+        <button
+          type="button"
+          aria-label="Copy public lottery link to clipboard"
+          className={`btn-clay-muted ${copied ? "border-matcha-800/40 bg-matcha-300/50 text-matcha-800" : ""}`}
+          onClick={copyPublicLink}
+        >
+          {copied ? "Copied!" : "Copy link"}
+        </button>
+      </div>
       {err ? (
         <p className="text-sm text-pomegranate-400" role="alert">
           {err}
@@ -174,11 +222,13 @@ export function LotteryManageActions({
         ) : null}
         <button
           type="button"
-          aria-label="Copy public lottery link to clipboard"
-          className="btn-clay-muted"
-          onClick={copyPublicLink}
+          disabled={busy}
+          aria-busy={pending === "delete"}
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-pomegranate-400/40 bg-pomegranate-400/15 px-4 py-2 text-sm font-semibold tracking-tight text-pomegranate-400 shadow-[var(--shadow-ring)] transition-colors hover:bg-pomegranate-400/25 disabled:opacity-45"
+          onClick={deleteLottery}
         >
-          Copy public link
+          {pending === "delete" ? <ClaySpinner /> : null}
+          {pending === "delete" ? "Deleting…" : "Delete lottery"}
         </button>
       </div>
     </div>

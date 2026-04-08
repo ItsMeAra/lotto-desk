@@ -17,6 +17,31 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
   const [message, setMessage] = useState("");
   const [token, setToken] = useState<string | null>(null);
 
+  const countryOptions = [
+    { code: "US", label: "United States" },
+    { code: "CA", label: "Canada" },
+    { code: "GB", label: "United Kingdom" },
+    { code: "AU", label: "Australia" },
+    { code: "NZ", label: "New Zealand" },
+    { code: "DE", label: "Germany" },
+    { code: "FR", label: "France" },
+    { code: "NL", label: "Netherlands" },
+    { code: "SE", label: "Sweden" },
+    { code: "NO", label: "Norway" },
+    { code: "DK", label: "Denmark" },
+    { code: "IE", label: "Ireland" },
+    { code: "ES", label: "Spain" },
+    { code: "IT", label: "Italy" },
+    { code: "PT", label: "Portugal" },
+    { code: "CH", label: "Switzerland" },
+    { code: "AT", label: "Austria" },
+    { code: "BE", label: "Belgium" },
+    { code: "PL", label: "Poland" },
+    { code: "JP", label: "Japan" },
+    { code: "KR", label: "South Korea" },
+    { code: "SG", label: "Singapore" },
+  ] as const;
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
@@ -33,6 +58,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
       fullName: String(fd.get("fullName") ?? ""),
       email: String(fd.get("email") ?? ""),
       address: String(fd.get("address") ?? ""),
+      country: String(fd.get("country") ?? ""),
       instagram: requireInstagram ? String(fd.get("instagram") ?? "") : null,
       paypal: requirePaypal ? String(fd.get("paypal") ?? "") : null,
       website: "",
@@ -78,7 +104,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
       />
       <div>
         <label htmlFor={`${formId}-fullName`} className="clay-label">
-          Full name
+          Full name <span className="text-pomegranate-400">*</span>
         </label>
         <input
           id={`${formId}-fullName`}
@@ -91,7 +117,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
       </div>
       <div>
         <label htmlFor={`${formId}-email`} className="clay-label">
-          Email
+          Email <span className="text-pomegranate-400">*</span>
         </label>
         <input
           id={`${formId}-email`}
@@ -105,7 +131,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
       </div>
       <div>
         <label htmlFor={`${formId}-address`} className="clay-label">
-          Shipping address
+          Shipping address <span className="text-pomegranate-400">*</span>
         </label>
         <textarea
           id={`${formId}-address`}
@@ -117,10 +143,33 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
           className="clay-input min-h-[5rem] resize-y"
         />
       </div>
+      <div>
+        <label htmlFor={`${formId}-country`} className="clay-label">
+          Shipping country <span className="text-pomegranate-400">*</span>
+        </label>
+        <select
+          id={`${formId}-country`}
+          name="country"
+          required
+          disabled={loading}
+          autoComplete="country"
+          defaultValue=""
+          className="clay-input"
+        >
+          <option value="" disabled>
+            Select a country
+          </option>
+          {countryOptions.map((c) => (
+            <option key={c.code} value={c.code}>
+              {c.label}
+            </option>
+          ))}
+        </select>
+      </div>
       {requireInstagram ? (
         <div>
           <label htmlFor={`${formId}-instagram`} className="clay-label">
-            Instagram <span className="text-pomegranate-400">*</span>
+            Instagram username <span className="text-pomegranate-400">*</span>
           </label>
           <input
             id={`${formId}-instagram`}
@@ -129,8 +178,10 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
             disabled={loading}
             aria-required="true"
             autoComplete="off"
+            placeholder="username (no @)"
             className="clay-input"
           />
+          <p className="mt-2 text-sm text-warm-silver">Just the username (example: <span className="font-mono">artistname</span>).</p>
         </div>
       ) : null}
       {requirePaypal ? (
@@ -162,7 +213,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
         type="submit"
         disabled={submitDisabled}
         aria-busy={loading}
-        className="btn-clay inline-flex w-full justify-center gap-2"
+        className="btn-clay inline-flex w-full justify-center gap-2 py-3 text-base"
       >
         {loading ? <ClaySpinner /> : null}
         {loading ? "Submitting…" : "Enter lottery"}

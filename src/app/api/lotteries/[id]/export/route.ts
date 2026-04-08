@@ -39,6 +39,7 @@ export async function GET(request: Request, ctx: { params: Promise<{ id: string 
       "full_name",
       "email",
       "address",
+      "country",
       "instagram",
       "paypal",
       "entered_at",
@@ -52,6 +53,7 @@ export async function GET(request: Request, ctx: { params: Promise<{ id: string 
           csvEscape(e.fullName),
           csvEscape(e.email),
           csvEscape(e.address),
+          csvEscape(e.country),
           csvEscape(e.instagram ?? ""),
           csvEscape(e.paypal ?? ""),
           csvEscape(e.createdAt.toISOString()),
@@ -71,7 +73,7 @@ export async function GET(request: Request, ctx: { params: Promise<{ id: string 
     where: { lotteryId: id },
     orderBy: { createdAt: "asc" },
   });
-  const header = ["full_name", "email", "address", "instagram", "paypal", "entered_at"];
+  const header = ["full_name", "email", "address", "country", "instagram", "paypal", "entered_at"];
   const lines = [header.join(",")];
   for (const e of entries) {
     lines.push(
@@ -79,6 +81,7 @@ export async function GET(request: Request, ctx: { params: Promise<{ id: string 
         csvEscape(e.fullName),
         csvEscape(e.email),
         csvEscape(e.address),
+        csvEscape(e.country),
         csvEscape(e.instagram ?? ""),
         csvEscape(e.paypal ?? ""),
         csvEscape(e.createdAt.toISOString()),

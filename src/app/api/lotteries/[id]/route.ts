@@ -62,6 +62,9 @@ export async function PATCH(request: Request, ctx: { params: Promise<{ id: strin
   if (data.status !== undefined) update.status = data.status;
   if (data.collectInstagram !== undefined) update.collectInstagram = data.collectInstagram;
   if (data.collectPaypal !== undefined) update.collectPaypal = data.collectPaypal;
+  if (data.shippingPolicy !== undefined) update.shippingPolicy = data.shippingPolicy;
+  if (data.allowedCountries !== undefined) update.allowedCountries = data.allowedCountries;
+  if (data.blockedCountries !== undefined) update.blockedCountries = data.blockedCountries;
   if (data.opensAt !== undefined) {
     update.opensAt =
       data.opensAt && data.opensAt !== "" ? new Date(data.opensAt) : null;
@@ -97,4 +100,23 @@ export async function PATCH(request: Request, ctx: { params: Promise<{ id: strin
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
   return NextResponse.json({ lottery });
+}
+
+export async function DELETE(_request: Request, ctx: { params: Promise<{ id: string }> }) {
+  const { profile } = await requireOrganizer();
+  if (!profile) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { id } = await ctx.params;
+  const existing = await getOwnedLottery(id, profile.id);
+  if (!existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  await logAudit(profile.id, "lottery.delete", {
+    lotteryId: id,
+    metadata: { title: existing.title, slug: existing.slug },
+  });
+  await prisma.lottery.delete({ where: { id } });
+  return NextResponse.json({ ok: true });
 }

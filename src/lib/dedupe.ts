@@ -27,8 +27,9 @@ export function normalizeOptionalHandle(value: string | undefined | null): strin
 export function buildDedupeKey(
   normEmail: string,
   normName: string,
-  normAddress: string
+  normAddress: string,
+  normCountry: string
 ): string {
-  const raw = `${normEmail}|${normName}|${normAddress}`;
+  const raw = `${normEmail}|${normName}|${normAddress}|${normCountry}`;
   return createHash("sha256").update(raw, "utf8").digest("hex");
 }
