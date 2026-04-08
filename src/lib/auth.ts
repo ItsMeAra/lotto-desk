@@ -12,12 +12,11 @@ export async function getSessionUser() {
 /** Ensures Profile row exists for Supabase auth user. */
 export async function ensureProfile(user: { id: string; email?: string | null }) {
   const email = user.email ?? "";
-  await prisma.profile.upsert({
+  return prisma.profile.upsert({
     where: { id: user.id },
     create: { id: user.id, email },
     update: email ? { email } : {},
   });
-  return prisma.profile.findUniqueOrThrow({ where: { id: user.id } });
 }
 
 export async function requireOrganizer() {

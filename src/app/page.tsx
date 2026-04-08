@@ -1,21 +1,24 @@
 import Link from "next/link";
-import { VantaHaloBackground } from "@/components/VantaHaloBackground";
+import { HomeHeroBackground } from "@/components/HomeHeroBackground";
+import { SiteBrand } from "@/components/SiteBrand";
 
 export default function HomePage() {
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col">
-      <VantaHaloBackground />
-      <header className="app-header-glass relative z-10 border-b">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
-          <span className="text-lg font-semibold tracking-tight text-clay-black">Lottery Desk</span>
-          <nav className="flex items-center gap-6">
-            <Link href="/login" className="nav-link no-underline">
-              Sign in
-            </Link>
-            <Link href="/signup" className="pill-cta no-underline">
-              Get started
-            </Link>
-          </nav>
+    <div className="relative isolate z-0 flex min-h-dvh flex-1 flex-col">
+      <HomeHeroBackground />
+      <header className="relative z-10 pt-5">
+        <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
+          <div className="nav-floating-bar">
+            <SiteBrand href="/" />
+            <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
+              <Link href="/login" className="nav-link no-underline">
+                Sign in
+              </Link>
+              <Link href="/signup" className="pill-cta no-underline">
+                Get started
+              </Link>
+            </nav>
+          </div>
         </div>
       </header>
 
@@ -32,10 +35,7 @@ export default function HomePage() {
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <Link href="/signup" className="pill-cta px-8 py-3 text-base no-underline">
-            Create an account
-          </Link>
-          <Link href="/login" className="pill-cta-inverse px-8 py-3 text-base no-underline">
-            Sign in
+            Get started
           </Link>
         </div>
       </main>

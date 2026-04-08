@@ -14,14 +14,11 @@ export default async function LotteriesListPage() {
       _count: { select: { entries: true, winners: true } },
     },
   });
-  await Promise.all(rows.map((l) => refreshLotterySchedule(l)));
-  const lotteries = await prisma.lottery.findMany({
-    where: { organizerId: user.id },
-    orderBy: { updatedAt: "desc" },
-    include: {
-      _count: { select: { entries: true, winners: true } },
-    },
-  });
+  const refreshed = await Promise.all(rows.map((l) => refreshLotterySchedule(l)));
+  const lotteries = refreshed.map((lottery, i) => ({
+    ...lottery,
+    _count: rows[i]._count,
+  }));
 
   return (
     <div>

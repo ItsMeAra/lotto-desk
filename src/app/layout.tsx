@@ -27,7 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${archivoBlack.variable} h-full`}>
       <body className="min-h-full flex flex-col font-sans antialiased bg-cream text-clay-black">
-        {children}
+        <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+        <footer className="mx-auto w-full max-w-5xl px-4 pb-10 pt-12 text-sm text-muted sm:px-6">
+          © {new Date().getFullYear()} Lottery Desk. All rights reserved.
+        </footer>
       </body>
     </html>
   );

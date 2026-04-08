@@ -8,9 +8,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
     redirect("/login");
   }
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className="flex min-h-dvh min-h-0 flex-1 flex-col bg-cream-deep">
       <DashboardNav />
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">{children}</main>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-12 pt-4 sm:px-6 sm:pb-16 sm:pt-6">
+        {children}
+      </main>
     </div>
   );
 }

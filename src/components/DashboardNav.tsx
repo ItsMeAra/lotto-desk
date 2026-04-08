@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useLinkStatus } from "next/link";
 import { useState } from "react";
+import { SiteBrand } from "@/components/SiteBrand";
 import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 function NavLinkLabel({ children }: { children: React.ReactNode }) {
@@ -49,20 +50,19 @@ function SignOutButton() {
 
 export function DashboardNav() {
   return (
-    <header className="app-header-glass border-b">
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
-        <nav className="flex items-center gap-8">
-          <DashboardNavLink
-            href="/dashboard"
-            className="text-base font-medium text-clay-black no-underline hover:text-matcha-600"
-          >
-            Dashboard
-          </DashboardNavLink>
-          <DashboardNavLink href="/dashboard/lotteries" className="nav-link no-underline">
-            Lotteries
-          </DashboardNavLink>
-        </nav>
-        <SignOutButton />
+    <header className="relative z-10 pt-5">
+      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
+        <div className="nav-floating-bar nav-floating-bar--spacious">
+          <div className="flex min-w-0 flex-1 items-center gap-5 sm:gap-8">
+            <SiteBrand href="/dashboard/lotteries" />
+            <nav className="flex min-w-0 flex-wrap items-center gap-1 sm:gap-2">
+              <DashboardNavLink href="/dashboard/lotteries" className="nav-link no-underline">
+                Lotteries
+              </DashboardNavLink>
+            </nav>
+          </div>
+          <SignOutButton />
+        </div>
       </div>
     </header>
   );

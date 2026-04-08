@@ -27,7 +27,7 @@ export function LoginForm() {
       return;
     }
     const next = searchParams.get("next");
-    router.push(next?.startsWith("/") ? next : "/dashboard");
+    router.push(next?.startsWith("/") ? next : "/dashboard/lotteries");
     router.refresh();
   }
 

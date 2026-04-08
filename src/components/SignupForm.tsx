@@ -33,7 +33,7 @@ export function SignupForm() {
       return;
     }
     if (data.session) {
-      router.push("/dashboard");
+      router.push("/dashboard/lotteries");
       router.refresh();
       return;
     }

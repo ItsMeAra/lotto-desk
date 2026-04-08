@@ -19,23 +19,25 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
   const { user } = await requireOrganizer();
   if (!user) return null;
 
+  const lotteryInclude = {
+    _count: { select: { entries: true, winners: true, blockedAttempts: true } },
+    winners: { include: { entry: true }, orderBy: { createdAt: "asc" as const } },
+  };
+
   const found = await prisma.lottery.findFirst({
     where: { id, organizerId: user.id },
-    include: {
-      _count: { select: { entries: true, winners: true, blockedAttempts: true } },
-      winners: { include: { entry: true }, orderBy: { createdAt: "asc" } },
-    },
+    include: lotteryInclude,
   });
   if (!found) notFound();
-  await refreshLotterySchedule(found);
-  const lottery = await prisma.lottery.findFirst({
-    where: { id, organizerId: user.id },
-    include: {
-      _count: { select: { entries: true, winners: true, blockedAttempts: true } },
-      winners: { include: { entry: true }, orderBy: { createdAt: "asc" } },
-    },
-  });
-  if (!lottery) notFound();
+
+  const refreshed = await refreshLotterySchedule(found);
+  const lottery =
+    refreshed === found
+      ? found
+      : await prisma.lottery.findFirstOrThrow({
+          where: { id, organizerId: user.id },
+          include: lotteryInclude,
+        });
 
   const entries = await prisma.entry.findMany({
     where: { lotteryId: id },
