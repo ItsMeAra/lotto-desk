@@ -9,7 +9,7 @@ type Props = {
 export function SiteBrand({ href = "/", className = "" }: Props) {
   return (
     <Link href={href} className={`nav-floating-brand no-underline ${className}`}>
-      Lottery Desk
+      Lotto Locker
     </Link>
   );
 }
