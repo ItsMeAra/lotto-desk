@@ -47,7 +47,7 @@ export default async function PublicLotteryPage({ params }: { params: Promise<{ 
           </div>
         ) : (
           <div className="clay-card border-slushie-500/40 bg-slushie-500/10 p-8 text-center">
-            <p className="text-base font-medium text-blueberry-800">
+            <p className="text-base font-medium text-clay-black">
               This lottery is not accepting entries right now.
             </p>
           </div>

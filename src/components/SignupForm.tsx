@@ -48,7 +48,7 @@ export function SignupForm() {
         </p>
       ) : null}
       {info ? (
-        <p className="rounded-[12px] border border-oat bg-oat-light/50 p-3 text-sm text-matcha-800" role="status">
+        <p className="rounded-[12px] border border-lemon-500/35 bg-lemon-500/10 p-3 text-sm text-clay-black" role="status">
           {info}
         </p>
       ) : null}

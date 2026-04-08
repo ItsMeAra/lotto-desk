@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireOrganizer } from "@/lib/auth";
+import { refreshLotterySchedule } from "@/lib/lottery-schedule";
 import { prisma } from "@/lib/prisma";
 import { lotteryCreateSchema } from "@/lib/validation";
 import { generateLotterySlug } from "@/lib/slug";
@@ -11,6 +12,14 @@ export async function GET() {
   if (!profile) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const rows = await prisma.lottery.findMany({
+    where: { organizerId: profile.id },
+    orderBy: { updatedAt: "desc" },
+    include: {
+      _count: { select: { entries: true, winners: true } },
+    },
+  });
+  await Promise.all(rows.map((l) => refreshLotterySchedule(l)));
   const lotteries = await prisma.lottery.findMany({
     where: { organizerId: profile.id },
     orderBy: { updatedAt: "desc" },

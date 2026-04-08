@@ -8,7 +8,6 @@ type Lottery = {
   id: string;
   title: string;
   description: string;
-  imageUrl: string | null;
   opensAt: string | null;
   closesAt: string | null;
   winnerCount: number;
@@ -37,7 +36,6 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
     const body = {
       title: String(fd.get("title")),
       description: String(fd.get("description")),
-      imageUrl: String(fd.get("imageUrl") || "") || null,
       opensAt: String(fd.get("opensAt") || "") || null,
       closesAt: String(fd.get("closesAt") || "") || null,
       winnerCount: Number(fd.get("winnerCount")),
@@ -95,21 +93,6 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
           disabled={fieldsDisabled}
           className="clay-input min-h-[6rem] resize-y"
         />
-      </div>
-      <div>
-        <label htmlFor={`imageUrl-${lottery.id}`} className="clay-label">
-          Image URL (optional override)
-        </label>
-        <input
-          id={`imageUrl-${lottery.id}`}
-          name="imageUrl"
-          type="url"
-          defaultValue={lottery.imageUrl ?? ""}
-          placeholder="https://…"
-          disabled={fieldsDisabled}
-          className="clay-input"
-        />
-        <p className="mt-1 text-xs text-warm-silver">Or use file upload above. URL must be https.</p>
       </div>
       <fieldset disabled={fieldsDisabled} className="min-w-0 space-y-3 border-0 p-0">
         <legend className="clay-label mb-1">Public entry form</legend>

@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { VantaHaloBackground } from "@/components/VantaHaloBackground";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-1 flex-col">
-      <header className="border-b border-oat bg-cream/95 backdrop-blur-sm">
+    <div className="relative flex min-h-0 flex-1 flex-col">
+      <VantaHaloBackground />
+      <header className="app-header-glass relative z-10 border-b">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
           <span className="text-lg font-semibold tracking-tight text-clay-black">Lottery Desk</span>
           <nav className="flex items-center gap-6">
@@ -17,11 +19,11 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-4 py-16 text-center sm:px-6 sm:py-24">
+      <main className="relative z-10 mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-4 py-16 text-center sm:px-6 sm:py-24">
         <p className="font-mono text-xs font-normal uppercase tracking-[0.0675rem] text-warm-silver">
           For artists &amp; indie shops
         </p>
-        <h1 className="mt-4 text-balance-safe text-4xl font-semibold leading-none tracking-tight text-clay-black sm:text-5xl md:text-6xl">
+        <h1 className="font-display mt-4 text-balance-safe text-4xl font-bold leading-none tracking-tight text-clay-black sm:text-5xl md:text-6xl">
           Run fair lotteries for your drops
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-pretty text-lg leading-relaxed text-warm-silver">
@@ -37,16 +39,6 @@ export default function HomePage() {
           </Link>
         </div>
       </main>
-
-      <section className="mx-auto mb-12 w-full max-w-5xl px-4 sm:px-6">
-        <div className="section-swatch-matcha">
-          <h2 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">Craft, not chaos</h2>
-          <p className="mt-3 max-w-2xl text-pretty text-base leading-relaxed text-matcha-300">
-            Warm tools for small teams: one public link per lottery, honest deduping, and a draw you control—so the
-            experience feels as thoughtful as the work you sell.
-          </p>
-        </div>
-      </section>
     </div>
   );
 }

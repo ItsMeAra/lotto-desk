@@ -2,6 +2,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Vercel often cannot reach Supabase *direct* host db.*.supabase.co:5432 (IPv6). Use the pooler URI from
+// Dashboard → Connect (Session or Transaction mode); hostname is usually *.pooler.supabase.com.
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")

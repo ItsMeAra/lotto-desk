@@ -98,7 +98,6 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
               id: lottery.id,
               title: lottery.title,
               description: lottery.description,
-              imageUrl: lottery.imageUrl,
               opensAt: lottery.opensAt?.toISOString() ?? null,
               closesAt: lottery.closesAt?.toISOString() ?? null,
               winnerCount: lottery.winnerCount,

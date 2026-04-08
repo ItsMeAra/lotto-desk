@@ -130,7 +130,7 @@ export function LotteryManageActions({
             }
             className="btn-clay-matcha items-center gap-2 text-sm"
           >
-            {pending === "open" ? <ClaySpinner variant="onDark" /> : null}
+            {pending === "open" ? <ClaySpinner variant="onLight" /> : null}
             {pending === "open" ? "Opening…" : "Open entries now"}
           </button>
         ) : null}
@@ -142,7 +142,7 @@ export function LotteryManageActions({
             onClick={closeLottery}
             className="btn-clay-lemon items-center gap-2 text-sm"
           >
-            {pending === "close" ? <ClaySpinner /> : null}
+            {pending === "close" ? <ClaySpinner variant="onLight" /> : null}
             {pending === "close" ? "Closing…" : "Close entries"}
           </button>
         ) : null}

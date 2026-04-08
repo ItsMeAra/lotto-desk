@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Outfit, Space_Mono } from "next/font/google";
+import { Rubik, Syne } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const rubik = Rubik({
+  variable: "--font-rubik",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const spaceMono = Space_Mono({
-  variable: "--font-space-mono",
+const syne = Syne({
+  variable: "--font-syne",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${spaceMono.variable} h-full`}>
+    <html lang="en" className={`${rubik.variable} ${syne.variable} h-full`}>
       <body className="min-h-full flex flex-col font-sans antialiased bg-cream text-clay-black">
         {children}
       </body>

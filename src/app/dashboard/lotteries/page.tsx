@@ -1,11 +1,20 @@
 import Link from "next/link";
 import { requireOrganizer } from "@/lib/auth";
+import { refreshLotterySchedule } from "@/lib/lottery-schedule";
 import { prisma } from "@/lib/prisma";
 
 export default async function LotteriesListPage() {
   const { user } = await requireOrganizer();
   if (!user) return null;
 
+  const rows = await prisma.lottery.findMany({
+    where: { organizerId: user.id },
+    orderBy: { updatedAt: "desc" },
+    include: {
+      _count: { select: { entries: true, winners: true } },
+    },
+  });
+  await Promise.all(rows.map((l) => refreshLotterySchedule(l)));
   const lotteries = await prisma.lottery.findMany({
     where: { organizerId: user.id },
     orderBy: { updatedAt: "desc" },

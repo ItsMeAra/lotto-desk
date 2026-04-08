@@ -4,6 +4,6 @@ export function isLotteryAcceptingEntries(status: LotteryStatus, opensAt: Date |
   if (status !== "OPEN") return false;
   const now = Date.now();
   if (opensAt && opensAt.getTime() > now) return false;
-  if (closesAt && closesAt.getTime() < now) return false;
+  if (closesAt && closesAt.getTime() <= now) return false;
   return true;
 }

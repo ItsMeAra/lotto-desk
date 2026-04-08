@@ -1,305 +1,262 @@
-# Design System Inspiration of Clay
+# Design System Inspiration of Sentry
 
 ## 1. Visual Theme & Atmosphere
 
-Clay's website is a warm, playful celebration of color that treats B2B data enrichment like a craft rather than an enterprise chore. The design language is built on a foundation of warm cream backgrounds (`#faf9f7`) and oat-toned borders (`#dad4c8`, `#eee9df`) that give every surface the tactile quality of handmade paper. Against this artisanal canvas, a vivid swatch palette explodes with personality — Matcha green, Slushie cyan, Lemon gold, Ube purple, Pomegranate pink, Blueberry navy, and Dragonfruit magenta — each named like flavors at a juice bar, not colors in an enterprise UI kit.
+Sentry's website is a dark-mode-first developer tool interface that speaks the language of code editors and terminal windows. The entire aesthetic is rooted in deep purple-black backgrounds (`#1f1633`, `#150f23`) that evoke the late-night debugging sessions Sentry was built for. Against this inky canvas, a carefully curated set of purples, pinks, and a distinctive lime-green accent (`#c2ef4e`) create a visual system that feels simultaneously technical and vibrant.
 
-The typography is anchored by Roobert, a geometric sans-serif with character, loaded with an extensive set of OpenType stylistic sets (`"ss01"`, `"ss03"`, `"ss10"`, `"ss11"`, `"ss12"`) that give the text a distinctive, slightly quirky personality. At display scale (80px, weight 600), Roobert uses aggressive negative letter-spacing (-3.2px) that compresses headlines into punchy, billboard-like statements. Space Mono serves as the monospace companion for code and technical labels, completing the craft-meets-tech duality.
+The typography pairing is deliberate: "Dammit Sans" appears at hero scale (88px, weight 700) as a display font with personality and attitude that matches Sentry's irreverent brand voice ("Code breaks. Fix it faster."), while Rubik serves as the workhorse UI font across all functional text — headings, body, buttons, captions, and navigation. Monaco provides the monospace layer for code snippets and technical content, completing the developer-tool trinity.
 
-What makes Clay truly distinctive is its hover micro-animations: buttons on hover translate upward slightly, change background to a contrasting swatch color, and cast a hard offset shadow (`rgb(0,0,0) -7px 7px`). This playful hover behavior — where a button lifts on interaction — creates a sense of physical delight that's rare in B2B software. Combined with generously rounded containers (24px–40px radius), dashed borders alongside solid ones, and a multi-layer shadow system that includes inset highlights, Clay feels like a design system that was made by people who genuinely enjoy making things.
+What makes Sentry distinctive is its embrace of the "dark IDE" aesthetic without feeling cold or sterile. Warm purple tones replace the typical cool grays of developer tools, and bold illustrative elements (3D characters, colorful product screenshots) punctuate the dark canvas. The button system uses a signature muted purple (`#79628c`) with inset shadows that creates a tactile, almost physical quality — buttons feel like they could be pressed into the surface.
 
 **Key Characteristics:**
-- Warm cream canvas (`#faf9f7`) with oat-toned borders (`#dad4c8`) — artisanal, not clinical
-- Named swatch palette: Matcha, Slushie, Lemon, Ube, Pomegranate, Blueberry, Dragonfruit
-- Roobert font with 5 OpenType stylistic sets — quirky geometric character
-- Playful hover animations: slight upward translate + hard offset shadow
-- Space Mono for code and technical labels
-- Generous border radius: 24px cards, 40px sections, 1584px pills
-- Mixed border styles: solid + dashed in the same interface
-- Multi-layer shadow with inset highlight: `0px 1px 1px` + `-1px inset` + `-0.5px`
+- Dark purple-black backgrounds (`#1f1633`, `#150f23`) — never pure black
+- Warm purple accent spectrum: from deep (`#362d59`) through mid (`#79628c`, `#6a5fc1`) to vibrant (`#422082`)
+- Lime-green accent (`#c2ef4e`) for high-visibility CTAs and highlights
+- Pink/coral accents (`#ffb287`, `#fa7faa`) for focus states and secondary highlights
+- "Dammit Sans" display font for brand personality at hero scale
+- Rubik as primary UI font with uppercase letter-spaced labels
+- Monaco monospace for code elements
+- Inset shadows on buttons creating tactile depth
+- Frosted glass effects with `blur(18px) saturate(180%)`
 
 ## 2. Color Palette & Roles
 
-### Primary
-- **Clay Black** (`#000000`): Text, headings, pricing card text, `--_theme--pricing-cards---text`
-- **Pure White** (`#ffffff`): Card backgrounds, button backgrounds, inverse text
-- **Warm Cream** (`#faf9f7`): Page background — the warm, paper-like canvas
+### Primary Brand
+- **Deep Purple** (`#1f1633`): Primary background, the defining color of the brand
+- **Darker Purple** (`#150f23`): Deeper sections, footer, secondary backgrounds
+- **Border Purple** (`#362d59`): Borders, dividers, subtle structural lines
 
-### Swatch Palette — Named Colors
+### Accent Colors
+- **Sentry Purple** (`#6a5fc1`): Primary interactive color — links, hover states, focus rings
+- **Muted Purple** (`#79628c`): Button backgrounds, secondary interactive elements
+- **Deep Violet** (`#422082`): Select dropdowns, active states, high-emphasis surfaces
+- **Lime Green** (`#c2ef4e`): High-visibility accent, special links, badge highlights
+- **Coral** (`#ffb287`): Focus state backgrounds, warm accent
+- **Pink** (`#fa7faa`): Focus outlines, decorative accents
 
-**Matcha (Green)**
-- **Matcha 300** (`#84e7a5`): `--_swatches---color--matcha-300`, light green accent
-- **Matcha 600** (`#078a52`): `--_swatches---color--matcha-600`, mid green
-- **Matcha 800** (`#02492a`): `--_swatches---color--matcha-800`, deep green for dark sections
+### Text Colors
+- **Pure White** (`#ffffff`): Primary text on dark backgrounds
+- **Light Gray** (`#e5e7eb`): Secondary text, muted content
+- **Code Yellow** (`#dcdcaa`): Syntax highlighting, code tokens
 
-**Slushie (Cyan)**
-- **Slushie 500** (`#3bd3fd`): `--_swatches---color--slushie-500`, bright cyan accent
-- **Slushie 800** (`#0089ad`): `--_swatches---color--slushie-800`, deep teal
-
-**Lemon (Gold)**
-- **Lemon 400** (`#f8cc65`): `--_swatches---color--lemon-400`, warm pale gold
-- **Lemon 500** (`#fbbd41`): `--_swatches---color--lemon-500`, primary gold
-- **Lemon 700** (`#d08a11`): `--_swatches---color--lemon-700`, deep amber
-- **Lemon 800** (`#9d6a09`): `--_swatches---color--lemon-800`, dark amber
-
-**Ube (Purple)**
-- **Ube 300** (`#c1b0ff`): `--_swatches---color--ube-300`, soft lavender
-- **Ube 800** (`#43089f`): `--_swatches---color--ube-800`, deep purple
-- **Ube 900** (`#32037d`): `--_swatches---color--ube-900`, darkest purple
-
-**Pomegranate (Pink/Red)**
-- **Pomegranate 400** (`#fc7981`): `--_swatches---color--pomegranate-400`, warm coral-pink
-
-**Blueberry (Navy Blue)**
-- **Blueberry 800** (`#01418d`): `--_swatches---color--blueberry-800`, deep navy
-
-### Neutral Scale (Warm)
-- **Warm Silver** (`#9f9b93`): Secondary/muted text, footer links
-- **Warm Charcoal** (`#55534e`): Tertiary text, dark muted links
-- **Dark Charcoal** (`#333333`): Link text on light backgrounds
-
-### Surface & Border
-- **Oat Border** (`#dad4c8`): Primary border — warm, cream-toned structural lines
-- **Oat Light** (`#eee9df`): Secondary lighter border
-- **Cool Border** (`#e6e8ec`): Cool-toned border for contrast sections
-- **Dark Border** (`#525a69`): Border on dark sections
-- **Light Frost** (`#eff1f3`): Subtle button background (at 0% opacity on hover)
-
-### Badges
-- **Badge Blue Bg** (`#f0f8ff`): Blue-tinted badge surface
-- **Badge Blue Text** (`#3859f9`): Vivid blue badge text
-- **Focus Ring** (`rgb(20, 110, 245) solid 2px`): Accessibility focus indicator
+### Surface & Overlay
+- **Glass White** (`rgba(255, 255, 255, 0.18)`): Frosted glass button backgrounds
+- **Glass Dark** (`rgba(54, 22, 107, 0.14)`): Hover overlay on glass elements
+- **Input White** (`#ffffff`): Form input backgrounds (light context)
+- **Input Border** (`#cfcfdb`): Form field borders
 
 ### Shadows
-- **Clay Shadow** (`rgba(0,0,0,0.1) 0px 1px 1px, rgba(0,0,0,0.04) 0px -1px 1px inset, rgba(0,0,0,0.05) 0px -0.5px 1px`): Multi-layer with inset highlight — the signature
-- **Hard Offset** (`rgb(0,0,0) -7px 7px`): Hover state — playful hard shadow
+- **Ambient Glow** (`rgba(22, 15, 36, 0.9) 0px 4px 4px 9px`): Deep purple ambient shadow
+- **Button Hover** (`rgba(0, 0, 0, 0.18) 0px 0.5rem 1.5rem`): Elevated hover state
+- **Card Shadow** (`rgba(0, 0, 0, 0.1) 0px 10px 15px -3px`): Standard card elevation
+- **Inset Button** (`rgba(0, 0, 0, 0.1) 0px 1px 3px 0px inset`): Tactile pressed effect
 
 ## 3. Typography Rules
 
 ### Font Families
-- **Primary**: `Roobert`, fallback: `Arial`
-- **Monospace**: `Space Mono`
-- **OpenType Features**: `"ss01"`, `"ss03"`, `"ss10"`, `"ss11"`, `"ss12"` on all Roobert text (display uses all 5; body/UI uses `"ss03"`, `"ss10"`, `"ss11"`, `"ss12"`)
+- **Display**: `Dammit Sans` — brand personality font for hero headings
+- **Primary UI**: `Rubik`, with fallbacks: `-apple-system, system-ui, Segoe UI, Helvetica, Arial`
+- **Monospace**: `Monaco`, with fallbacks: `Menlo, Ubuntu Mono`
 
 ### Hierarchy
 
 | Role | Font | Size | Weight | Line Height | Letter Spacing | Notes |
 |------|------|------|--------|-------------|----------------|-------|
-| Display Hero | Roobert | 80px (5.00rem) | 600 | 1.00 (tight) | -3.2px | All 5 stylistic sets |
-| Display Secondary | Roobert | 60px (3.75rem) | 600 | 1.00 (tight) | -2.4px | All 5 stylistic sets |
-| Section Heading | Roobert | 44px (2.75rem) | 600 | 1.10 (tight) | -0.88px to -1.32px | All 5 stylistic sets |
-| Card Heading | Roobert | 32px (2.00rem) | 600 | 1.10 (tight) | -0.64px | All 5 stylistic sets |
-| Feature Title | Roobert | 20px (1.25rem) | 600 | 1.40 | -0.4px | All 5 stylistic sets |
-| Sub-heading | Roobert | 20px (1.25rem) | 500 | 1.50 | -0.16px | 4 stylistic sets (no ss01) |
-| Body Large | Roobert | 20px (1.25rem) | 400 | 1.40 | normal | 4 stylistic sets |
-| Body | Roobert | 18px (1.13rem) | 400 | 1.60 (relaxed) | -0.36px | 4 stylistic sets |
-| Body Standard | Roobert | 16px (1.00rem) | 400 | 1.50 | normal | 4 stylistic sets |
-| Body Medium | Roobert | 16px (1.00rem) | 500 | 1.20–1.40 | -0.16px to -0.32px | 4–5 stylistic sets |
-| Button | Roobert | 16px (1.00rem) | 500 | 1.50 | -0.16px | 4 stylistic sets |
-| Button Large | Roobert | 24px (1.50rem) | 400 | 1.50 | normal | 4 stylistic sets |
-| Button Small | Roobert | 12.8px (0.80rem) | 500 | 1.50 | -0.128px | 4 stylistic sets |
-| Nav Link | Roobert | 15px (0.94rem) | 500 | 1.60 (relaxed) | normal | 4 stylistic sets |
-| Caption | Roobert | 14px (0.88rem) | 400 | 1.50–1.60 | -0.14px | 4 stylistic sets |
-| Small | Roobert | 12px (0.75rem) | 400 | 1.50 | normal | 4 stylistic sets |
-| Uppercase Label | Roobert | 12px (0.75rem) | 600 | 1.20 (tight) | 1.08px | `text-transform: uppercase`, 4 sets |
-| Badge | Roobert | 9.6px | 600 | — | — | Pill badges |
+| Display Hero | Dammit Sans | 88px (5.50rem) | 700 | 1.20 (tight) | normal | Maximum impact, brand voice |
+| Display Secondary | Dammit Sans | 60px (3.75rem) | 500 | 1.10 (tight) | normal | Secondary hero text |
+| Section Heading | Rubik | 30px (1.88rem) | 400 | 1.20 (tight) | normal | Major section titles |
+| Sub-heading | Rubik | 27px (1.69rem) | 500 | 1.25 (tight) | normal | Feature section headers |
+| Card Title | Rubik | 24px (1.50rem) | 500 | 1.25 (tight) | normal | Card and block headings |
+| Feature Title | Rubik | 20px (1.25rem) | 600 | 1.25 (tight) | normal | Emphasized feature names |
+| Body | Rubik | 16px (1.00rem) | 400 | 1.50 | normal | Standard body text |
+| Body Emphasis | Rubik | 16px (1.00rem) | 500–600 | 1.50 | normal | Bold body, nav items |
+| Nav Label | Rubik | 15px (0.94rem) | 500 | 1.40 | normal | Navigation links |
+| Uppercase Label | Rubik | 15px (0.94rem) | 500 | 1.25 (tight) | normal | `text-transform: uppercase` |
+| Button Text | Rubik | 14px (0.88rem) | 500–700 | 1.14–1.29 (tight) | 0.2px | `text-transform: uppercase` |
+| Caption | Rubik | 14px (0.88rem) | 500–700 | 1.00–1.43 | 0.2px | Often uppercase |
+| Small Caption | Rubik | 12px (0.75rem) | 600 | 2.00 (relaxed) | normal | Subtle annotations |
+| Micro Label | Rubik | 10px (0.63rem) | 600 | 1.80 (relaxed) | 0.25px | `text-transform: uppercase` |
+| Code | Monaco | 16px (1.00rem) | 400–700 | 1.50 | normal | Code blocks, technical text |
 
 ### Principles
-- **Five stylistic sets as identity**: The combination of `"ss01"`, `"ss03"`, `"ss10"`, `"ss11"`, `"ss12"` on Roobert creates a distinctive typographic personality. `ss01` is reserved for headings and emphasis — body text omits it, creating a subtle hierarchy through glyph variation.
-- **Aggressive display compression**: -3.2px at 80px, -2.4px at 60px — the most compressed display tracking alongside the most generous body spacing (1.60 line-height), creating dramatic contrast.
-- **Weight 600 for headings, 500 for UI, 400 for body**: Clean three-tier system where each weight has a strict role.
-- **Uppercase labels with positive tracking**: 12px uppercase at 1.08px letter-spacing creates the systematic wayfinding pattern.
+- **Dual personality**: Dammit Sans brings irreverent brand character at display scale; Rubik provides clean professionalism for everything functional.
+- **Uppercase as system**: Buttons, captions, labels, and micro-text all use `text-transform: uppercase` with subtle letter-spacing (0.2px–0.25px), creating a systematic "technical label" pattern throughout.
+- **Weight stratification**: Rubik uses 400 (body), 500 (emphasis/nav), 600 (titles/strong), 700 (buttons/CTAs) — a clean four-tier weight system.
+- **Tight headings, relaxed body**: All headings use 1.10–1.25 line-height; body uses 1.50; small captions expand to 2.00 for readability at tiny sizes.
 
 ## 4. Component Stylings
 
 ### Buttons
 
-**Primary (Transparent with Hover Animation)**
-- Background: transparent (`rgba(239, 241, 243, 0)`)
-- Text: `#000000`
-- Padding: 6.4px 12.8px
-- Border: none (or `1px solid #717989` for outlined variant)
-- Hover: background shifts to swatch color (e.g., `#434346`), text to white, slight `translateY` lift, hard shadow `rgb(0,0,0) -7px 7px`
-- Focus: `rgb(20, 110, 245) solid 2px` outline
+**Primary Muted Purple**
+- Background: `#79628c` (rgb(121, 98, 140))
+- Text: `#ffffff`, uppercase, 14px, weight 500–700, letter-spacing 0.2px
+- Border: `1px solid #584674`
+- Radius: 13px
+- Shadow: `rgba(0, 0, 0, 0.1) 0px 1px 3px 0px inset` (tactile inset)
+- Hover: elevated shadow `rgba(0, 0, 0, 0.18) 0px 0.5rem 1.5rem`
+
+**Glass White**
+- Background: `rgba(255, 255, 255, 0.18)` (frosted glass)
+- Text: `#ffffff`
+- Padding: 8px
+- Radius: 12px (left-aligned variant: `12px 0px 0px 12px`)
+- Shadow: `rgba(0, 0, 0, 0.08) 0px 2px 8px`
+- Hover background: `rgba(54, 22, 107, 0.14)`
+- Use: Secondary actions on dark surfaces
 
 **White Solid**
 - Background: `#ffffff`
-- Text: `#000000`
-- Padding: 6.4px
-- Hover: oat-200 swatch color, slight lift + shadow
-- Use: Primary CTA on colored sections
+- Text: `#1f1633`
+- Padding: 12px 16px
+- Radius: 8px
+- Hover: background transitions to `#6a5fc1`, text to white
+- Focus: background `#ffb287` (coral), outline `rgb(106, 95, 193) solid 0.125rem`
+- Use: High-visibility CTA on dark backgrounds
 
-**Ghost Outlined**
-- Background: transparent
-- Text: `#000000`
-- Padding: 8px
-- Border: `1px solid #717989`
-- Radius: 4px
-- Hover: dragonfruit swatch color, white text, slight lift + shadow
+**Deep Violet (Select/Dropdown)**
+- Background: `#422082`
+- Text: `#ffffff`
+- Padding: 8px 16px
+- Radius: 8px
+
+### Inputs
+
+**Text Input**
+- Background: `#ffffff`
+- Text: `#1f1633`
+- Border: `1px solid #cfcfdb`
+- Padding: 8px 12px
+- Radius: 6px
+- Focus: border-color stays `#cfcfdb`, shadow `rgba(0, 0, 0, 0.15) 0px 2px 10px inset`
+
+### Links
+- **Default on dark**: `#ffffff`, underline decoration
+- **Hover**: color transitions to `#6a5fc1` (Sentry Purple)
+- **Purple links**: `#6a5fc1` default, hover underline
+- **Lime accent links**: `#c2ef4e` default, hover to `#6a5fc1`
+- **Dark context links**: `#362d59`, hover to `#ffffff`
 
 ### Cards & Containers
-- Background: `#ffffff` on cream canvas
-- Border: `1px solid #dad4c8` (warm oat) or `1px dashed #dad4c8`
-- Radius: 12px (standard cards), 24px (feature cards/images), 40px (section containers/footer)
-- Shadow: `rgba(0,0,0,0.1) 0px 1px 1px, rgba(0,0,0,0.04) 0px -1px 1px inset, rgba(0,0,0,0.05) 0px -0.5px 1px`
-- Colorful section backgrounds using swatch palette (matcha, slushie, ube, lemon)
-
-### Inputs & Forms
-- Text: `#000000`
-- Border: `1px solid #717989`
-- Radius: 4px
-- Focus: `rgb(20, 110, 245) solid 2px` outline
+- Background: semi-transparent or dark purple surfaces
+- Radius: 8px–12px
+- Shadow: `rgba(0, 0, 0, 0.1) 0px 10px 15px -3px`
+- Backdrop filter: `blur(18px) saturate(180%)` for glass effects
 
 ### Navigation
-- Sticky top nav on cream background
-- Roobert 15px weight 500 for nav links
-- Clay logo left-aligned
-- CTA buttons right-aligned with pill radius
-- Border bottom: `1px solid #dad4c8`
-- Mobile: hamburger collapse at 767px
-
-### Image Treatment
-- Product screenshots in white cards with oat borders
-- Colorful illustrated sections with swatch background colors
-- 8px–24px radius on images
-- Full-width colorful section backgrounds
-
-### Distinctive Components
-
-**Swatch Color Sections**
-- Full-width sections with swatch-colored backgrounds (matcha green, slushie cyan, ube purple, lemon gold)
-- White text on dark swatches, black text on light swatches
-- Each section tells a distinct product story through its color
-
-**Playful Hover Buttons**
-- Slight translate upward on hover (no rotation)
-- Hard offset shadow (`-7px 7px`) instead of soft blur
-- Background transitions to contrasting swatch color
-- Creates a physical, toy-like interaction quality
-
-**Dashed Border Elements**
-- Dashed borders (`1px dashed #dad4c8`) alongside solid borders
-- Used for secondary containers and decorative elements
-- Adds a hand-drawn, craft-like quality
+- Dark transparent header over hero content
+- Rubik 15px weight 500 for nav links
+- White text, hover to Sentry Purple (`#6a5fc1`)
+- Uppercase labels with 0.2px letter-spacing for categories
+- Mobile: hamburger menu, full-width expanded
 
 ## 5. Layout Principles
 
 ### Spacing System
 - Base unit: 8px
-- Scale: 1px, 2px, 4px, 6.4px, 8px, 12px, 12.8px, 16px, 18px, 20px, 24px
+- Scale: 1px, 2px, 4px, 5px, 6px, 8px, 12px, 16px, 24px, 32px, 40px, 44px, 45px, 47px
 
 ### Grid & Container
-- Max content width centered
-- Feature sections alternate between white cards and colorful swatch backgrounds
-- Card grids: 2–3 columns on desktop
-- Full-width colorful sections break the grid
-- Footer with generous 40px radius container
+- Max content width: 1152px (XL breakpoint)
+- Responsive padding: 2rem (mobile) → 4rem (tablet+)
+- Content centered within container
+- Full-width dark sections with contained inner content
+
+### Breakpoints
+| Name | Width | Key Changes |
+|------|-------|-------------|
+| Mobile | < 576px | Single column, stacked layout |
+| Small Tablet | 576–640px | Minor width adjustments |
+| Tablet | 640–768px | 2-column begins |
+| Small Desktop | 768–992px | Full nav visible |
+| Desktop | 992–1152px | Standard layout |
+| Large Desktop | 1152–1440px | Max-width content |
 
 ### Whitespace Philosophy
-- **Warm, generous breathing**: The cream background provides a warm rest between content blocks. Spacing is generous but not austere — it feels inviting, like a well-set table.
-- **Color as spatial rhythm**: The alternating swatch-colored sections create visual rhythm through hue rather than just whitespace. Each color section is its own "room."
-- **Craft-like density inside cards**: Within cards, content is compact and well-organized, contrasting with the generous outer spacing.
+- **Dark breathing room**: Generous vertical spacing between sections (64px–80px+) lets the dark background serve as a visual rest.
+- **Content islands**: Feature sections are self-contained blocks floating in the dark purple sea, each with its own internal spacing rhythm.
+- **Asymmetric padding**: Buttons use asymmetric padding patterns (12px 16px, 8px 12px) that feel organic rather than rigid.
 
 ### Border Radius Scale
-- Sharp (4px): Ghost buttons, inputs
-- Standard (8px): Small cards, images, links
-- Badge (11px): Tag badges
-- Card (12px): Standard cards, buttons
-- Feature (24px): Feature cards, images, panels
-- Section (40px): Large sections, footer, containers
-- Pill (1584px): CTAs, pill-shaped buttons
+- Minimal (6px): Form inputs, small interactive elements
+- Standard (8px): Buttons, cards, containers
+- Comfortable (10px–12px): Larger containers, glass panels
+- Rounded (13px): Primary muted buttons
+- Pill (18px): Image containers, badges
 
 ## 6. Depth & Elevation
 
 | Level | Treatment | Use |
 |-------|-----------|-----|
-| Flat (Level 0) | No shadow, cream canvas | Page background |
-| Clay Shadow (Level 1) | `rgba(0,0,0,0.1) 0px 1px 1px, rgba(0,0,0,0.04) 0px -1px inset, rgba(0,0,0,0.05) 0px -0.5px` | Cards, buttons — multi-layer with inset highlight |
-| Hover Hard (Level 2) | `rgb(0,0,0) -7px 7px` | Hover state — playful hard offset shadow |
-| Focus (Level 3) | `rgb(20, 110, 245) solid 2px` | Keyboard focus ring |
+| Sunken (Level -1) | Inset shadow `rgba(0, 0, 0, 0.1) 0px 1px 3px inset` | Primary buttons (tactile pressed feel) |
+| Flat (Level 0) | No shadow | Default surfaces, dark backgrounds |
+| Surface (Level 1) | `rgba(0, 0, 0, 0.08) 0px 2px 8px` | Glass buttons, subtle cards |
+| Elevated (Level 2) | `rgba(0, 0, 0, 0.1) 0px 10px 15px -3px` | Cards, floating panels |
+| Prominent (Level 3) | `rgba(0, 0, 0, 0.18) 0px 0.5rem 1.5rem` | Hover states, modals |
+| Ambient (Level 4) | `rgba(22, 15, 36, 0.9) 0px 4px 4px 9px` | Deep purple ambient glow around hero |
 
-**Shadow Philosophy**: Clay's shadow system is uniquely three-layered: a downward cast (`0px 1px 1px`), an upward inset highlight (`0px -1px 1px inset`), and a subtle edge (`0px -0.5px 1px`). This creates a "pressed into clay" quality where elements feel both raised AND embedded — like a clay tablet where content is stamped into the surface. The hover hard shadow (`-7px 7px`) is deliberately retro-graphic, referencing print-era drop shadows and adding physical playfulness.
-
-### Decorative Depth
-- Full-width swatch-colored sections create dramatic depth through color contrast
-- Dashed borders add visual texture alongside solid borders
-- Product illustrations with warm, organic art style
+**Shadow Philosophy**: Sentry uses a unique combination of inset shadows (buttons feel pressed INTO the surface) and ambient glows (content radiates from the dark background). The deep purple ambient shadow (`rgba(22, 15, 36, 0.9)`) is the signature — it creates a bioluminescent quality where content seems to emit its own purple-tinted light.
 
 ## 7. Do's and Don'ts
 
 ### Do
-- Use warm cream (`#faf9f7`) as the page background — the warmth is the identity
-- Apply all 5 OpenType stylistic sets on Roobert headings: `"ss01", "ss03", "ss10", "ss11", "ss12"`
-- Use the named swatch palette (Matcha, Slushie, Lemon, Ube, Pomegranate, Blueberry) for section backgrounds
-- Apply the playful hover animation: slight `translateY` lift, hard shadow `-7px 7px`
-- Use warm oat borders (`#dad4c8`) — not neutral gray
-- Mix solid and dashed borders for visual variety
-- Use generous radius: 24px for cards, 40px for sections
-- Use weight 600 exclusively for headings, 500 for UI, 400 for body
+- Use deep purple backgrounds (`#1f1633`, `#150f23`) — never pure black (`#000000`)
+- Apply inset shadows on primary buttons for the tactile pressed effect
+- Use Dammit Sans ONLY for hero/display headings — Rubik for everything else
+- Apply `text-transform: uppercase` with `letter-spacing: 0.2px` on buttons and labels
+- Use the lime-green accent (`#c2ef4e`) sparingly for maximum impact
+- Employ frosted glass effects (`blur(18px) saturate(180%)`) for layered surfaces
+- Maintain the warm purple shadow tones — shadows should feel purple-tinted, not neutral gray
+- Use Rubik's 4-tier weight system: 400 (body), 500 (nav/emphasis), 600 (titles), 700 (CTAs)
 
 ### Don't
-- Don't use cool gray backgrounds — the warm cream (`#faf9f7`) is non-negotiable
-- Don't use neutral gray borders (`#ccc`, `#ddd`) — always use the warm oat tones
-- Don't mix more than 2 swatch colors in the same section
-- Don't skip the OpenType stylistic sets — they define Roobert's character
-- Don't use subtle hover effects — the lift + hard shadow is the signature interaction
-- Don't use small border radius (<12px) on feature cards — the generous rounding is structural
-- Don't use standard shadows (blur-based) — Clay uses hard offset and multi-layer inset
-- Don't forget the uppercase labels with 1.08px tracking — they're the wayfinding system
+- Don't use pure black (`#000000`) for backgrounds — always use the warm purple-blacks
+- Don't apply Dammit Sans to body text or UI elements — it's display-only
+- Don't use standard gray (`#666`, `#999`) for borders — use purple-tinted grays (`#362d59`, `#584674`)
+- Don't drop the uppercase treatment on buttons — it's a system-wide pattern
+- Don't use sharp corners (0px radius) — minimum 6px for all interactive elements
+- Don't mix the lime-green accent with the coral/pink accents in the same component
+- Don't use flat (non-inset) shadows on primary buttons — the tactile quality is signature
+- Don't forget letter-spacing on uppercase text — 0.2px minimum
 
 ## 8. Responsive Behavior
 
 ### Breakpoints
 | Name | Width | Key Changes |
 |------|-------|-------------|
-| Mobile Small | <479px | Single column, tight padding |
-| Mobile | 479–767px | Standard mobile, stacked layout |
-| Tablet | 768–991px | 2-column grids, condensed nav |
-| Desktop | 992px+ | Full layout, 3-column grids, expanded sections |
-
-### Touch Targets
-- Buttons: minimum 6.4px + 12.8px padding for adequate touch area
-- Nav links: 15px font with generous spacing
-- Mobile: full-width buttons for easy tapping
+| Mobile | <576px | Single column, hamburger nav, stacked CTAs |
+| Tablet | 576–768px | 2-column feature grids begin |
+| Small Desktop | 768–992px | Full navigation, side-by-side layouts |
+| Desktop | 992–1152px | Max-width container, full layout |
+| Large | >1152px | Content max-width maintained, generous margins |
 
 ### Collapsing Strategy
-- Hero: 80px → 60px → smaller display text
-- Navigation: horizontal → hamburger at 767px
-- Feature sections: multi-column → stacked
-- Colorful sections: maintain full-width but compress padding
-- Card grids: 3-column → 2-column → single column
-
-### Image Behavior
-- Product screenshots scale proportionally
-- Colorful section illustrations adapt to viewport width
-- Rounded corners maintained across breakpoints
+- Hero text: 88px Dammit Sans → 60px → mobile scales
+- Navigation: horizontal → hamburger with slide-out
+- Feature sections: side-by-side → stacked cards
+- Buttons: inline → full-width stacked on mobile
+- Container padding: 4rem → 2rem
 
 ## 9. Agent Prompt Guide
 
 ### Quick Color Reference
-- Background: Warm Cream (`#faf9f7`)
-- Text: Clay Black (`#000000`)
-- Secondary text: Warm Silver (`#9f9b93`)
-- Border: Oat Border (`#dad4c8`)
-- Green accent: Matcha 600 (`#078a52`)
-- Cyan accent: Slushie 500 (`#3bd3fd`)
-- Gold accent: Lemon 500 (`#fbbd41`)
-- Purple accent: Ube 800 (`#43089f`)
-- Pink accent: Pomegranate 400 (`#fc7981`)
+- Background: `#1f1633` (primary), `#150f23` (deeper)
+- Text: `#ffffff` (primary), `#e5e7eb` (secondary)
+- Interactive: `#6a5fc1` (links/hover), `#79628c` (buttons)
+- Accent: `#c2ef4e` (lime highlight), `#ffb287` (coral focus)
+- Border: `#362d59` (dark), `#cfcfdb` (light context)
 
 ### Example Component Prompts
-- "Create a hero on warm cream (#faf9f7) background. Headline at 80px Roobert weight 600, line-height 1.00, letter-spacing -3.2px, OpenType 'ss01 ss03 ss10 ss11 ss12', black text. Subtitle at 20px weight 400, line-height 1.40, #9f9b93 text. Two buttons: white solid pill (12px radius) and ghost outlined (4px radius, 1px solid #717989)."
-- "Design a colorful section with Matcha 800 (#02492a) background. Heading at 44px Roobert weight 600, letter-spacing -1.32px, white text. Body at 18px weight 400, line-height 1.60, #84e7a5 text. White card inset with oat border (#dad4c8), 24px radius."
-- "Build a button with playful hover: default transparent background, black text, 16px Roobert weight 500. On hover: background #434346, text white, slight translateY lift, hard shadow rgb(0,0,0) -7px 7px."
-- "Create a card: white background, 1px solid #dad4c8 border, 24px radius. Shadow: rgba(0,0,0,0.1) 0px 1px 1px, rgba(0,0,0,0.04) 0px -1px 1px inset. Title at 32px Roobert weight 600, letter-spacing -0.64px."
-- "Design an uppercase label: 12px Roobert weight 600, text-transform uppercase, letter-spacing 1.08px, OpenType 'ss03 ss10 ss11 ss12'."
+- "Create a hero section on deep purple background (#1f1633). Headline at 88px Dammit Sans weight 700, line-height 1.20, white text. Sub-text at 16px Rubik weight 400, line-height 1.50. White solid CTA button (8px radius, 12px 16px padding), hover transitions to #6a5fc1."
+- "Design a navigation bar: transparent over dark background. Rubik 15px weight 500, white text. Uppercase category labels with 0.2px letter-spacing. Hover color #6a5fc1."
+- "Build a primary button: background #79628c, border 1px solid #584674, inset shadow rgba(0,0,0,0.1) 0px 1px 3px, white uppercase text at 14px Rubik weight 700, letter-spacing 0.2px, radius 13px. Hover: shadow rgba(0,0,0,0.18) 0px 0.5rem 1.5rem."
+- "Create a glass card panel: background rgba(255,255,255,0.18), backdrop-filter blur(18px) saturate(180%), radius 12px. White text content inside."
+- "Design a feature section: #150f23 background, 24px Rubik weight 500 heading, 16px Rubik weight 400 body text. 14px uppercase lime-green (#c2ef4e) label above heading."
 
 ### Iteration Guide
-1. Start with warm cream (#faf9f7) — never cool white
-2. Swatch colors are for full sections, not small accents — go bold with matcha, slushie, ube
-3. Oat borders (#dad4c8) everywhere — dashed variants for decoration
-4. OpenType stylistic sets are mandatory — they make Roobert look like Roobert
-5. Hover animations are the signature — lift + hard shadow, not subtle fades
-6. Generous radius: 24px cards, 40px sections — nothing looks sharp or corporate
-7. Three weights: 600 (headings), 500 (UI), 400 (body) — strict roles
-
+1. Always start with the dark purple background — the color palette is built FOR dark mode
+2. Use inset shadows on buttons, ambient purple glows on hero sections
+3. Uppercase + letter-spacing is the systematic pattern for labels, buttons, and captions
+4. Lime green (#c2ef4e) is the "pop" color — use once per section maximum
+5. Frosted glass for overlaid panels, solid purple for primary surfaces
+6. Rubik handles 90% of typography — Dammit Sans is hero-only

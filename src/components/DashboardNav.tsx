@@ -49,7 +49,7 @@ function SignOutButton() {
 
 export function DashboardNav() {
   return (
-    <header className="border-b border-oat bg-cream/95 backdrop-blur-sm">
+    <header className="app-header-glass border-b">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
         <nav className="flex items-center gap-8">
           <DashboardNavLink

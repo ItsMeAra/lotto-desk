@@ -57,7 +57,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
 
   if (status === "ok") {
     return (
-      <div className="clay-card border-matcha-600/30 bg-matcha-300/15 p-6 text-matcha-800">
+      <div className="clay-card border-lemon-500/40 bg-lemon-500/10 p-6 text-clay-black">
         <p className="text-base font-medium">{message}</p>
       </div>
     );
