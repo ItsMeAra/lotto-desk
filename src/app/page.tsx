@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { HomeHeroBackground } from "@/components/HomeHeroBackground";
-import { SiteBrand } from "@/components/SiteBrand";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export default function HomePage() {
   const faqs = [
@@ -51,21 +51,7 @@ export default function HomePage() {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <header className="relative z-10 pt-5">
-        <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
-          <div className="nav-floating-bar">
-            <SiteBrand href="/" />
-            <nav className="flex shrink-0 items-center gap-1 sm:gap-2">
-              <Link href="/login" className="nav-link no-underline">
-                Sign in
-              </Link>
-              <Link href="/signup" className="pill-cta no-underline">
-                Get started
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="relative z-10 mx-auto w-full max-w-5xl flex-1 px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-20">
         {/* Hero */}

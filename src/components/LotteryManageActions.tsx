@@ -1,8 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { createPortal } from "react-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ClaySpinner } from "@/components/ui/ClaySpinner";
+import { fireDrawWinnerConfetti } from "@/lib/draw-confetti";
 
 type Status = "DRAFT" | "OPEN" | "CLOSED" | "DRAWN";
 
@@ -41,7 +43,39 @@ export function LotteryManageActions({
   const [pending, setPending] = useState<null | "open" | "close" | "draw" | "delete">(null);
   const [err, setErr] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [drawCelebration, setDrawCelebration] = useState(false);
+  const celebrationCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const busy = pending !== null;
+
+  useEffect(() => {
+    return () => {
+      if (celebrationCloseTimerRef.current) {
+        clearTimeout(celebrationCloseTimerRef.current);
+      }
+    };
+  }, []);
+
+  const dismissDrawCelebration = useCallback(() => {
+    if (celebrationCloseTimerRef.current) {
+      clearTimeout(celebrationCloseTimerRef.current);
+      celebrationCloseTimerRef.current = null;
+    }
+    setDrawCelebration(false);
+  }, []);
+
+  useEffect(() => {
+    if (!drawCelebration) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") dismissDrawCelebration();
+    }
+    window.addEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [drawCelebration, dismissDrawCelebration]);
 
   async function patch(body: object) {
     setPending("open");
@@ -88,7 +122,16 @@ export function LotteryManageActions({
       setErr(apiErrorMessage(data));
       return;
     }
+    setDrawCelebration(true);
+    requestAnimationFrame(() => {
+      fireDrawWinnerConfetti();
+    });
     router.refresh();
+    if (celebrationCloseTimerRef.current) clearTimeout(celebrationCloseTimerRef.current);
+    celebrationCloseTimerRef.current = setTimeout(() => {
+      celebrationCloseTimerRef.current = null;
+      setDrawCelebration(false);
+    }, 2400);
   }
 
   async function deleteLottery() {
@@ -124,8 +167,46 @@ export function LotteryManageActions({
   const scheduleHintId = "lottery-schedule-hint";
   const publicPath = `/l/${slug}`;
 
+  const celebrationOverlay =
+    drawCelebration && typeof document !== "undefined"
+      ? createPortal(
+          <div
+            className="fixed inset-0 z-[10000] flex items-center justify-center bg-clay-black/45 p-4 backdrop-blur-[3px]"
+            role="presentation"
+            onClick={dismissDrawCelebration}
+          >
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="draw-win-title"
+              className="clay-card max-w-sm p-8 text-center shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <p className="font-display text-4xl leading-none text-matcha-800" aria-hidden>
+                <span className="inline-block">🎉</span>
+              </p>
+              <h2 id="draw-win-title" className="mt-4 text-xl font-semibold tracking-tight text-clay-black">
+                Winners drawn!
+              </h2>
+              <p className="mt-2 text-sm text-warm-silver">
+                Your raffle is complete—winner details are below.
+              </p>
+              <button
+                type="button"
+                className="btn-clay-matcha mt-6 w-full justify-center text-sm"
+                onClick={dismissDrawCelebration}
+              >
+                Done
+              </button>
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
+
   return (
     <div className="flex flex-col gap-3">
+      {celebrationOverlay}
       <div className="clay-card-dashed flex flex-col gap-3 p-4">
         <div className="min-w-0">
           <p className="clay-label mb-1">Public link</p>

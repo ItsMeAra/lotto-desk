@@ -1,6 +1,7 @@
 "use client";
 
 import { Turnstile } from "@marsidev/react-turnstile";
+import Link from "next/link";
 import { useId, useState } from "react";
 import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
@@ -209,6 +210,14 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
           {message}
         </p>
       ) : null}
+      <p className="text-xs leading-relaxed text-warm-silver">
+        By submitting, you understand the organizer may use this information to run the lottery and contact winners. Rafflehaus
+        processes personal data as described in the{" "}
+        <Link href="/privacy" className="link-clay font-medium text-clay-black">
+          Privacy Policy
+        </Link>
+        . The organizer is responsible for their own rules and notices.
+      </p>
       <button
         type="submit"
         disabled={submitDisabled}
