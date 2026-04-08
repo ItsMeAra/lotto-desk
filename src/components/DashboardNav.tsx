@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLinkStatus } from "next/link";
-import { useState } from "react";
+import { NavUserMenu } from "@/components/NavUserMenu";
 import { SiteBrand } from "@/components/SiteBrand";
 import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
@@ -32,22 +32,6 @@ function DashboardNavLink({
   );
 }
 
-function SignOutButton() {
-  const [busy, setBusy] = useState(false);
-  return (
-    <form action="/logout" method="post" onSubmit={() => setBusy(true)}>
-      <button
-        type="submit"
-        disabled={busy}
-        className="nav-link inline-flex items-center gap-2 disabled:cursor-wait disabled:opacity-70"
-      >
-        {busy ? <ClaySpinner className="!size-[0.85em]" /> : null}
-        {busy ? "Signing out…" : "Sign out"}
-      </button>
-    </form>
-  );
-}
-
 export function DashboardNav({
   displayName,
   email,
@@ -55,8 +39,6 @@ export function DashboardNav({
   displayName: string | null;
   email: string;
 }) {
-  const signedInAs = displayName?.trim() || email;
-
   return (
     <header className="relative z-10 pt-5">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
@@ -67,20 +49,9 @@ export function DashboardNav({
               <DashboardNavLink href="/dashboard/lotteries" className="nav-link no-underline">
                 Lotteries
               </DashboardNavLink>
-              <DashboardNavLink href="/dashboard/settings" className="nav-link no-underline">
-                Settings
-              </DashboardNavLink>
             </nav>
           </div>
-          <div className="flex min-w-0 shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-4">
-            <span
-              className="hidden max-w-[14rem] truncate text-sm text-warm-silver sm:inline"
-              title={signedInAs}
-            >
-              Signed in as <span className="font-medium text-clay-black">{signedInAs}</span>
-            </span>
-            <SignOutButton />
-          </div>
+          <NavUserMenu displayName={displayName} email={email} />
         </div>
       </div>
     </header>

@@ -7,5 +7,5 @@ export async function middleware(request: NextRequest) {
 
 /** Limit to routes that need Supabase cookie refresh — skips public pages & static for faster nav. */
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/signup", "/auth/:path*", "/logout"],
+  matcher: ["/dashboard/:path*", "/login", "/signup", "/forgot-password", "/auth/:path*", "/logout"],
 };

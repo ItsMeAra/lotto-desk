@@ -60,9 +60,14 @@ export function LoginForm() {
         />
       </div>
       <div>
-        <label htmlFor="password" className="clay-label">
-          Password
-        </label>
+        <div className="flex items-baseline justify-between gap-2">
+          <label htmlFor="password" className="clay-label mb-0">
+            Password
+          </label>
+          <Link href="/forgot-password" className="link-clay shrink-0 text-sm font-medium">
+            Forgot password?
+          </Link>
+        </div>
         <input
           id="password"
           name="password"
@@ -70,7 +75,7 @@ export function LoginForm() {
           required
           disabled={busy}
           autoComplete="current-password"
-          className="clay-input"
+          className="clay-input mt-2"
         />
       </div>
       <button type="submit" disabled={busy} aria-busy={busy} className="btn-clay inline-flex w-full justify-center gap-2">
