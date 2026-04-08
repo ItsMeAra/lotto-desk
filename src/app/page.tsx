@@ -124,7 +124,7 @@ export default function HomePage() {
         <section className="mt-16 sm:mt-20 py-12">
           <div className="mx-auto max-w-3xl text-center">
             <h2 className="font-display text-balance-safe text-3xl font-normal leading-[0.9] tracking-tight text-clay-black sm:text-4xl">
-              Everythign you need, nothing you don't.
+              Features
             </h2>
           </div>
 
