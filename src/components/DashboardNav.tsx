@@ -48,7 +48,15 @@ function SignOutButton() {
   );
 }
 
-export function DashboardNav() {
+export function DashboardNav({
+  displayName,
+  email,
+}: {
+  displayName: string | null;
+  email: string;
+}) {
+  const signedInAs = displayName?.trim() || email;
+
   return (
     <header className="relative z-10 pt-5">
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6">
@@ -59,9 +67,20 @@ export function DashboardNav() {
               <DashboardNavLink href="/dashboard/lotteries" className="nav-link no-underline">
                 Lotteries
               </DashboardNavLink>
+              <DashboardNavLink href="/dashboard/settings" className="nav-link no-underline">
+                Settings
+              </DashboardNavLink>
             </nav>
           </div>
-          <SignOutButton />
+          <div className="flex min-w-0 shrink-0 flex-col items-end gap-2 sm:flex-row sm:items-center sm:gap-4">
+            <span
+              className="hidden max-w-[14rem] truncate text-sm text-warm-silver sm:inline"
+              title={signedInAs}
+            >
+              Signed in as <span className="font-medium text-clay-black">{signedInAs}</span>
+            </span>
+            <SignOutButton />
+          </div>
         </div>
       </div>
     </header>

@@ -1,6 +1,10 @@
 import { prisma } from "@/lib/prisma";
 
-export type DuplicateFlag = "duplicate_email" | "duplicate_paypal" | "duplicate_instagram";
+export type DuplicateFlag =
+  | "duplicate_email"
+  | "duplicate_paypal"
+  | "duplicate_instagram"
+  | "duplicate_phone";
 
 export async function getEntryDuplicateFlags(
   lotteryId: string
@@ -12,12 +16,14 @@ export async function getEntryDuplicateFlags(
       normEmail: true,
       normPaypal: true,
       normInstagram: true,
+      normPhone: true,
     },
   });
 
   const emailCount = new Map<string, number>();
   const paypalCount = new Map<string, number>();
   const igCount = new Map<string, number>();
+  const phoneCount = new Map<string, number>();
 
   for (const e of entries) {
     emailCount.set(e.normEmail, (emailCount.get(e.normEmail) ?? 0) + 1);
@@ -26,6 +32,9 @@ export async function getEntryDuplicateFlags(
     }
     if (e.normInstagram) {
       igCount.set(e.normInstagram, (igCount.get(e.normInstagram) ?? 0) + 1);
+    }
+    if (e.normPhone) {
+      phoneCount.set(e.normPhone, (phoneCount.get(e.normPhone) ?? 0) + 1);
     }
   }
 
@@ -38,6 +47,9 @@ export async function getEntryDuplicateFlags(
     }
     if (e.normInstagram && (igCount.get(e.normInstagram) ?? 0) > 1) {
       flags.push("duplicate_instagram");
+    }
+    if (e.normPhone && (phoneCount.get(e.normPhone) ?? 0) > 1) {
+      flags.push("duplicate_phone");
     }
     if (flags.length) result.set(e.id, flags);
   }

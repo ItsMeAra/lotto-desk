@@ -15,6 +15,7 @@ export const lotteryCreateSchema = z.object({
   winnerCount: z.coerce.number().int().min(1).max(100).optional().default(1),
   collectInstagram: z.boolean().optional().default(false),
   collectPaypal: z.boolean().optional().default(false),
+  collectPhone: z.boolean().optional().default(false),
   shippingPolicy: z.enum(["ANY", "US_ONLY", "ALLOW_LIST", "BLOCK_LIST"]).optional().default("ANY"),
   allowedCountries: z.array(z.string().length(2)).optional().default([]),
   blockedCountries: z.array(z.string().length(2)).optional().default([]),
@@ -36,6 +37,7 @@ export const entrySubmitSchema = z.object({
     .refine((v) => /^[A-Z]{2}$/.test(v), "Invalid country"),
   instagram: z.string().max(200).optional().nullable(),
   paypal: z.string().max(200).optional().nullable(),
+  phone: z.string().max(40).optional().nullable(),
   website: z.string().max(10).optional(),
   turnstileToken: z.string().optional(),
 });
@@ -48,12 +50,14 @@ export function validateEntryFieldsForLottery(
   lottery: {
     collectInstagram: boolean;
     collectPaypal: boolean;
+    collectPhone: boolean;
     shippingPolicy: "ANY" | "US_ONLY" | "ALLOW_LIST" | "BLOCK_LIST";
     allowedCountries: string[];
     blockedCountries: string[];
   },
   instagram: string | null | undefined,
   paypal: string | null | undefined,
+  phone: string | null | undefined,
   country: string
 ): string | null {
   if (lottery.collectInstagram) {
@@ -65,6 +69,14 @@ export function validateEntryFieldsForLottery(
     if (!v) return "PayPal email is required for this lottery.";
     const emailCheck = z.string().email().safeParse(v);
     if (!emailCheck.success) return "Enter a valid PayPal email address.";
+  }
+  if (lottery.collectPhone) {
+    const raw = phone?.trim();
+    if (!raw) return "Phone number is required for this lottery.";
+    const digits = raw.replace(/\D/g, "");
+    if (digits.length < 8 || digits.length > 15) {
+      return "Enter a valid phone number (include country code if needed).";
+    }
   }
   const c = country.toUpperCase();
   if (lottery.shippingPolicy === "US_ONLY" && c !== "US") {
@@ -82,3 +94,8 @@ export function validateEntryFieldsForLottery(
   }
   return null;
 }
+
+export const profilePatchSchema = z.object({
+  /** Trimmed; send empty string to clear the display name. */
+  displayName: z.string().max(120),
+});

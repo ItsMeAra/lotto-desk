@@ -13,6 +13,7 @@ const flagLabels: Record<string, string> = {
   duplicate_email: "Same email as another entry",
   duplicate_paypal: "Same PayPal as another entry",
   duplicate_instagram: "Same Instagram as another entry",
+  duplicate_phone: "Same phone number as another entry",
 };
 
 /** Header status pill — aligned with lottery lifecycle (Wise matcha green when open). */
@@ -104,6 +105,7 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
                 status: lottery.status,
                 collectInstagram: lottery.collectInstagram,
                 collectPaypal: lottery.collectPaypal,
+                collectPhone: lottery.collectPhone,
                 shippingPolicy: lottery.shippingPolicy,
                 allowedCountries: lottery.allowedCountries,
                 blockedCountries: lottery.blockedCountries,
@@ -155,6 +157,10 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
                               <dt className="font-medium text-clay-black">PayPal</dt>
                               <dd className="break-words text-warm-silver">{w.entry.paypal || "—"}</dd>
                             </div>
+                            <div className="grid grid-cols-[7.5rem_1fr] gap-2">
+                              <dt className="font-medium text-clay-black">Phone</dt>
+                              <dd className="break-words text-warm-silver">{w.entry.phone || "—"}</dd>
+                            </div>
                           </dl>
                         </li>
                       );
@@ -192,11 +198,12 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
         <section className="w-full min-w-0">
           <h2 className="text-xl font-semibold tracking-tight text-clay-black">Entries ({entries.length})</h2>
           <div className="mt-4 overflow-x-auto clay-card p-0">
-            <table className="w-full min-w-[640px] text-left text-sm">
+            <table className="w-full min-w-[800px] text-left text-sm">
               <thead className="border-b border-oat bg-oat-light/40 text-xs font-semibold uppercase tracking-[0.0675rem] text-warm-silver">
                 <tr>
                   <th className="px-4 py-3">Name</th>
                   <th className="px-4 py-3">Email</th>
+                  <th className="px-4 py-3">Phone</th>
                   <th className="px-4 py-3">Flags</th>
                   <th className="px-4 py-3">When</th>
                 </tr>
@@ -208,6 +215,9 @@ export default async function LotteryDetailPage({ params }: { params: Promise<{ 
                     <tr key={e.id} className="bg-card">
                       <td className="px-4 py-3 font-medium text-clay-black">{e.fullName}</td>
                       <td className="px-4 py-3 text-warm-silver">{e.email}</td>
+                      <td className="px-4 py-3 whitespace-nowrap font-mono text-xs text-warm-silver">
+                        {e.phone || "—"}
+                      </td>
                       <td className="px-4 py-3">
                         {flags.length === 0 ? (
                           "—"

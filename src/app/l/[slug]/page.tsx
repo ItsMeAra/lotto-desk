@@ -133,6 +133,7 @@ export default async function PublicLotteryPage({ params }: { params: Promise<{ 
                 siteKey={siteKey}
                 requireInstagram={lottery.collectInstagram}
                 requirePaypal={lottery.collectPaypal}
+                requirePhone={lottery.collectPhone}
               />
             </div>
           ) : (

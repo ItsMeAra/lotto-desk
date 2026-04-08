@@ -62,6 +62,7 @@ export async function PATCH(request: Request, ctx: { params: Promise<{ id: strin
   if (data.status !== undefined) update.status = data.status;
   if (data.collectInstagram !== undefined) update.collectInstagram = data.collectInstagram;
   if (data.collectPaypal !== undefined) update.collectPaypal = data.collectPaypal;
+  if (data.collectPhone !== undefined) update.collectPhone = data.collectPhone;
   if (data.shippingPolicy !== undefined) update.shippingPolicy = data.shippingPolicy;
   if (data.allowedCountries !== undefined) update.allowedCountries = data.allowedCountries;
   if (data.blockedCountries !== undefined) update.blockedCountries = data.blockedCountries;

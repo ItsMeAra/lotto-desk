@@ -8,6 +8,7 @@ import {
   normalizeEmail,
   normalizeName,
   normalizeOptionalHandle,
+  normalizePhoneDigits,
 } from "@/lib/dedupe";
 import { isLotteryAcceptingEntries } from "@/lib/lottery-window";
 import { checkRateLimit, getClientIp, rateLimitKey } from "@/lib/rate-limit";
@@ -45,7 +46,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ slug: stri
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
-  const { fullName, email, address, country, instagram, paypal, website, turnstileToken } = parsed.data;
+  const { fullName, email, address, country, instagram, paypal, phone, website, turnstileToken } = parsed.data;
   if (website && website.length > 0) {
     return NextResponse.json({ error: "Invalid submission" }, { status: 400 });
   }
@@ -59,6 +60,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ slug: stri
     lottery,
     instagram,
     paypal,
+    phone,
     country
   );
   if (entryFieldError) {
@@ -71,7 +73,8 @@ export async function POST(request: Request, ctx: { params: Promise<{ slug: stri
   const normCountry = country.toUpperCase();
   const normInstagram = normalizeOptionalHandle(instagram);
   const normPaypal = normalizeOptionalHandle(paypal);
-  const dedupeKey = buildDedupeKey(normEmail, normName, normAddress, normCountry);
+  const normPhone = lottery.collectPhone ? normalizePhoneDigits(phone ?? undefined) : null;
+  const dedupeKey = buildDedupeKey(normEmail, normName, normAddress, normCountry, normPhone);
 
   try {
     const entry = await prisma.entry.create({
@@ -83,6 +86,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ slug: stri
         country: country.toUpperCase(),
         instagram: instagram?.trim() || null,
         paypal: paypal?.trim() || null,
+        phone: lottery.collectPhone ? phone?.trim() || null : null,
         dedupeKey,
         normEmail,
         normName,
@@ -90,6 +94,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ slug: stri
         normCountry,
         normInstagram,
         normPaypal,
+        normPhone,
       },
     });
     return NextResponse.json({ ok: true, entryId: entry.id });

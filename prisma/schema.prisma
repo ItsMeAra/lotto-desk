@@ -10,10 +10,11 @@ datasource db {
 }
 
 model Profile {
-  id        String    @id @db.Uuid
-  email     String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          String    @id @db.Uuid
+  email       String
+  displayName String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   lotteries Lottery[]
   auditLogs AuditLog[]
 }
@@ -46,6 +47,7 @@ model Lottery {
   winnerCount        Int                   @default(1)
   collectInstagram   Boolean               @default(false)
   collectPaypal      Boolean               @default(false)
+  collectPhone       Boolean               @default(false)
   shippingPolicy     ShippingPolicy        @default(ANY)
   allowedCountries   String[]              @default([])
   blockedCountries   String[]              @default([])
@@ -67,6 +69,7 @@ model Entry {
   country       String   @default("US")
   instagram     String?
   paypal        String?
+  phone         String?
   dedupeKey     String
   normEmail     String
   normName      String
@@ -74,6 +77,7 @@ model Entry {
   normCountry   String   @default("US")
   normInstagram String?
   normPaypal    String?
+  normPhone     String?
   createdAt     DateTime @default(now())
   winners       Winner[]
 

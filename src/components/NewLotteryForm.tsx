@@ -42,6 +42,7 @@ export function NewLotteryForm() {
       winnerCount: Number(fd.get("winnerCount") || 1),
       collectInstagram: fd.get("collectInstagram") === "on",
       collectPaypal: fd.get("collectPaypal") === "on",
+      collectPhone: fd.get("collectPhone") === "on",
       shippingPolicy,
       allowedCountries,
       blockedCountries,
@@ -118,6 +119,19 @@ export function NewLotteryForm() {
             />
             <span>
               Collect PayPal email{" "}
+              <span className="text-warm-silver">(required on public form when checked)</span>
+            </span>
+          </label>
+          <label className="flex cursor-pointer items-start gap-3 text-base font-normal text-clay-black">
+            <input
+              type="checkbox"
+              name="collectPhone"
+              value="on"
+              disabled={busy}
+              className="mt-1 size-4 rounded border-input-border"
+            />
+            <span>
+              Collect phone number{" "}
               <span className="text-warm-silver">(required on public form when checked)</span>
             </span>
           </label>

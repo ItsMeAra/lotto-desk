@@ -10,9 +10,16 @@ type Props = {
   siteKey: string | undefined;
   requireInstagram: boolean;
   requirePaypal: boolean;
+  requirePhone: boolean;
 };
 
-export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal }: Props) {
+export function PublicEntryForm({
+  slug,
+  siteKey,
+  requireInstagram,
+  requirePaypal,
+  requirePhone,
+}: Props) {
   const formId = useId();
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "err">("idle");
   const [message, setMessage] = useState("");
@@ -62,6 +69,7 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
       country: String(fd.get("country") ?? ""),
       instagram: requireInstagram ? String(fd.get("instagram") ?? "") : null,
       paypal: requirePaypal ? String(fd.get("paypal") ?? "") : null,
+      phone: requirePhone ? String(fd.get("phone") ?? "") : null,
       website: "",
       turnstileToken: siteKey ? token ?? undefined : undefined,
     };
@@ -198,6 +206,25 @@ export function PublicEntryForm({ slug, siteKey, requireInstagram, requirePaypal
             disabled={loading}
             aria-required="true"
             autoComplete="email"
+            className="clay-input"
+          />
+        </div>
+      ) : null}
+      {requirePhone ? (
+        <div>
+          <label htmlFor={`${formId}-phone`} className="clay-label">
+            Phone number <span className="text-pomegranate-400">*</span>
+          </label>
+          <input
+            id={`${formId}-phone`}
+            name="phone"
+            type="tel"
+            required
+            disabled={loading}
+            aria-required="true"
+            autoComplete="tel"
+            inputMode="tel"
+            placeholder="Include country code if needed"
             className="clay-input"
           />
         </div>

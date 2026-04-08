@@ -14,6 +14,7 @@ type Lottery = {
   status: string;
   collectInstagram: boolean;
   collectPaypal: boolean;
+  collectPhone: boolean;
   shippingPolicy?: "ANY" | "US_ONLY" | "ALLOW_LIST" | "BLOCK_LIST";
   allowedCountries?: string[];
   blockedCountries?: string[];
@@ -65,6 +66,7 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
       winnerCount: Number(fd.get("winnerCount")),
       collectInstagram: fd.get("collectInstagram") === "on",
       collectPaypal: fd.get("collectPaypal") === "on",
+      collectPhone: fd.get("collectPhone") === "on",
       shippingPolicy,
       allowedCountries,
       blockedCountries,
@@ -146,6 +148,18 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
             />
             <span>
               Ask for PayPal email <span className="text-warm-silver">(required when enabled)</span>
+            </span>
+          </label>
+          <label className="flex cursor-pointer items-start gap-3 text-base text-clay-black">
+            <input
+              type="checkbox"
+              name="collectPhone"
+              value="on"
+              defaultChecked={lottery.collectPhone}
+              className="mt-1 size-4 rounded border border-input-border"
+            />
+            <span>
+              Ask for phone number <span className="text-warm-silver">(required when enabled)</span>
             </span>
           </label>
         </div>
