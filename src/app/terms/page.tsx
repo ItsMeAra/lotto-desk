@@ -126,8 +126,8 @@ export default function TermsPage() {
         <section className="space-y-3">
           <h2 className="text-xl font-semibold tracking-tight text-clay-black">12. Governing law and disputes</h2>
           <p>
-            <strong>Placeholder:</strong> These Terms are governed by the laws of [JURISDICTION], excluding conflict-of-law
-            rules. Courts in [VENUE] will have exclusive jurisdiction, except where prohibited by law. Alternative dispute
+            <strong>Placeholder:</strong> These Terms are governed by the laws of California, excluding conflict-of-law
+            rules. Courts in California will have exclusive jurisdiction, except where prohibited by law. Alternative dispute
             resolution (arbitration or class-action waiver) may be required in your jurisdiction—confirm with counsel.
           </p>
         </section>
