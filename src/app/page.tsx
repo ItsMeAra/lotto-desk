@@ -180,7 +180,6 @@ export default function HomePage() {
             <h2 className="font-display text-3xl font-normal leading-[0.9] tracking-tight text-clay-black sm:text-4xl">
               FAQ
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-warm-silver">Answers to common questions about running lotteries.</p>
           </div>
 
           <div className="mx-auto mt-10 max-w-3xl space-y-4">
