@@ -69,7 +69,7 @@ export default function HomePage() {
 
       <main className="relative z-10 mx-auto w-full max-w-5xl flex-1 px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-20">
         {/* Hero */}
-        <section className="mx-auto max-w-5xl py-24 text-center sm:py-28">
+        <section className="mx-auto max-w-5xl py-10 text-center">
           <div className="hero-panel px-5 py-12 sm:px-10 sm:py-14">
             <p className="font-mono text-xs font-normal uppercase tracking-[0.0675rem] text-warm-silver">
               For artists &amp; indie shops

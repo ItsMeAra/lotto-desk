@@ -22,15 +22,20 @@ export default async function LotteriesListPage() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="font-mono text-xs font-normal uppercase tracking-[0.0675rem] text-warm-silver">Your lotteries</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-clay-black">Lotteries</h1>
+      <header className="clay-card p-6 sm:p-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+          <div>
+            <p className="font-mono text-xs font-normal uppercase tracking-[0.0675rem] text-warm-silver">Your lotteries</p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-clay-black sm:text-3xl">Lotteries</h1>
+          </div>
+          <Link
+            href="/dashboard/lotteries/new"
+            className="pill-cta w-full shrink-0 no-underline px-5 py-2.5 text-center sm:w-auto"
+          >
+            New lottery
+          </Link>
         </div>
-        <Link href="/dashboard/lotteries/new" className="pill-cta no-underline px-5 py-2.5">
-          New lottery
-        </Link>
-      </div>
+      </header>
       {lotteries.length === 0 ? (
         <p className="mt-10 text-lg text-warm-silver">No lotteries yet. Create one to get a public link.</p>
       ) : (

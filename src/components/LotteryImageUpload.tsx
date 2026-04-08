@@ -7,9 +7,11 @@ import { ClaySpinner } from "@/components/ui/ClaySpinner";
 type Props = {
   lotteryId: string;
   disabled?: boolean;
+  imageUrl?: string | null;
+  imageAlt?: string;
 };
 
-export function LotteryImageUpload({ lotteryId, disabled }: Props) {
+export function LotteryImageUpload({ lotteryId, disabled, imageUrl, imageAlt }: Props) {
   const router = useRouter();
   const inputId = useId();
   const [busy, setBusy] = useState(false);
@@ -43,6 +45,20 @@ export function LotteryImageUpload({ lotteryId, disabled }: Props) {
       <p className="mt-2 text-base text-warm-silver">
         Add at least one image before entries can open. JPEG, PNG, WebP, or GIF, up to 5MB.
       </p>
+      {imageUrl?.trim() ? (
+        <div className="mt-4 overflow-hidden rounded-[20px] border border-oat bg-oat-light/30 shadow-[var(--shadow-clay)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageUrl}
+            alt={imageAlt ?? "Lottery image preview"}
+            className="aspect-[4/3] w-full object-cover"
+          />
+        </div>
+      ) : (
+        <div className="mt-4 flex aspect-[4/3] w-full items-center justify-center rounded-[20px] border border-dashed border-oat bg-oat-light/20 text-sm text-warm-silver">
+          No image yet
+        </div>
+      )}
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <input
           id={inputId}

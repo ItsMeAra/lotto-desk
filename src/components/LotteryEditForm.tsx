@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ClaySpinner } from "@/components/ui/ClaySpinner";
 
 type Lottery = {
@@ -30,6 +30,15 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [shippingPolicy, setShippingPolicy] = useState<string>(lottery.shippingPolicy ?? "ANY");
+  const [allowedDraft, setAllowedDraft] = useState(() => (lottery.allowedCountries ?? []).join(", "));
+  const [blockedDraft, setBlockedDraft] = useState(() => (lottery.blockedCountries ?? []).join(", "));
+
+  useEffect(() => {
+    setShippingPolicy(lottery.shippingPolicy ?? "ANY");
+    setAllowedDraft((lottery.allowedCountries ?? []).join(", "));
+    setBlockedDraft((lottery.blockedCountries ?? []).join(", "));
+  }, [lottery.id]);
 
   function parseCountryList(value: FormDataEntryValue | null): string[] {
     const raw = String(value ?? "")
@@ -44,11 +53,10 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
     setBusy(true);
     setErr(null);
     const fd = new FormData(e.currentTarget);
-    const shippingPolicy = String(fd.get("shippingPolicy") || lottery.shippingPolicy || "ANY");
     const allowedCountries =
-      shippingPolicy === "ALLOW_LIST" ? parseCountryList(fd.get("allowedCountries")) : [];
+      shippingPolicy === "ALLOW_LIST" ? parseCountryList(allowedDraft) : [];
     const blockedCountries =
-      shippingPolicy === "BLOCK_LIST" ? parseCountryList(fd.get("blockedCountries")) : [];
+      shippingPolicy === "BLOCK_LIST" ? parseCountryList(blockedDraft) : [];
     const body = {
       title: String(fd.get("title")),
       description: String(fd.get("description")),
@@ -153,7 +161,8 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
             <select
               id={`ship-policy-${lottery.id}`}
               name="shippingPolicy"
-              defaultValue={lottery.shippingPolicy ?? "ANY"}
+              value={shippingPolicy}
+              onChange={(e) => setShippingPolicy(e.target.value)}
               className="clay-input"
             >
               <option value="ANY">International (any country)</option>
@@ -165,34 +174,36 @@ export function LotteryEditForm({ lottery }: { lottery: Lottery }) {
               Entrants must select a shipping country; submissions are blocked if they don&rsquo;t match this policy.
             </p>
           </div>
-          <div className="sm:col-span-2">
-            <label htmlFor={`ship-allow-${lottery.id}`} className="clay-label">
-              Allowed countries (ISO codes)
-            </label>
-            <textarea
-              id={`ship-allow-${lottery.id}`}
-              name="allowedCountries"
-              defaultValue={(lottery.allowedCountries ?? []).join(", ")}
-              rows={2}
-              placeholder="US, CA, GB"
-              className="clay-input min-h-[4rem] resize-y"
-            />
-            <p className="mt-1 text-xs text-warm-silver">Used only when policy is “Allow only selected countries”.</p>
-          </div>
-          <div className="sm:col-span-2">
-            <label htmlFor={`ship-block-${lottery.id}`} className="clay-label">
-              Blocked countries (ISO codes)
-            </label>
-            <textarea
-              id={`ship-block-${lottery.id}`}
-              name="blockedCountries"
-              defaultValue={(lottery.blockedCountries ?? []).join(", ")}
-              rows={2}
-              placeholder="RU, BY"
-              className="clay-input min-h-[4rem] resize-y"
-            />
-            <p className="mt-1 text-xs text-warm-silver">Used only when policy is “Block certain countries”.</p>
-          </div>
+          {shippingPolicy === "ALLOW_LIST" ? (
+            <div className="sm:col-span-2">
+              <label htmlFor={`ship-allow-${lottery.id}`} className="clay-label">
+                Allowed countries (ISO codes)
+              </label>
+              <textarea
+                id={`ship-allow-${lottery.id}`}
+                rows={2}
+                value={allowedDraft}
+                onChange={(e) => setAllowedDraft(e.target.value)}
+                placeholder="US, CA, GB"
+                className="clay-input min-h-[4rem] resize-y"
+              />
+            </div>
+          ) : null}
+          {shippingPolicy === "BLOCK_LIST" ? (
+            <div className="sm:col-span-2">
+              <label htmlFor={`ship-block-${lottery.id}`} className="clay-label">
+                Blocked countries (ISO codes)
+              </label>
+              <textarea
+                id={`ship-block-${lottery.id}`}
+                rows={2}
+                value={blockedDraft}
+                onChange={(e) => setBlockedDraft(e.target.value)}
+                placeholder="RU, BY"
+                className="clay-input min-h-[4rem] resize-y"
+              />
+            </div>
+          ) : null}
         </div>
       </fieldset>
       <div className="grid gap-4 sm:grid-cols-2">

@@ -21,14 +21,16 @@ export function LoginForm() {
     const password = String(fd.get("password"));
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setBusy(false);
     if (error) {
+      setBusy(false);
       setErr(error.message);
       return;
     }
     const next = searchParams.get("next");
-    router.push(next?.startsWith("/") ? next : "/dashboard/lotteries");
+    const dest = next?.startsWith("/") ? next : "/dashboard/lotteries";
+    router.push(dest);
     router.refresh();
+    // Stay busy until navigation replaces this screen (avoids dead air after the spinner stops)
   }
 
   return (

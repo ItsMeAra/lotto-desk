@@ -126,7 +126,7 @@ export function LotteryManageActions({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="clay-card-dashed flex flex-col gap-2 p-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="clay-card-dashed flex flex-col gap-3 p-4">
         <div className="min-w-0">
           <p className="clay-label mb-1">Public link</p>
           <a
@@ -141,11 +141,27 @@ export function LotteryManageActions({
         </div>
         <button
           type="button"
-          aria-label="Copy public lottery link to clipboard"
-          className={`btn-clay-muted ${copied ? "border-matcha-800/40 bg-matcha-300/50 text-matcha-800" : ""}`}
+          aria-label={copied ? "Link copied to clipboard" : "Copy public lottery URL to clipboard"}
+          title={copied ? "Copied" : "Copy URL"}
+          className={`btn-clay-muted inline-flex h-10 w-full shrink-0 items-center justify-center gap-2 ${copied ? "border-matcha-800/40 bg-matcha-300/50 text-matcha-800" : ""}`}
           onClick={copyPublicLink}
         >
-          {copied ? "Copied!" : "Copy link"}
+          {copied ? (
+            <>
+              <svg className="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+                <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span>Copied!</span>
+            </>
+          ) : (
+            <>
+              <svg className="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+                <rect x="9" y="9" width="13" height="13" rx="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span>Copy URL</span>
+            </>
+          )}
         </button>
       </div>
       {err ? (
@@ -164,67 +180,84 @@ export function LotteryManageActions({
           Upload an image before you can open entries.
         </p>
       ) : null}
-      <div className="flex flex-wrap gap-2">
-        {status === "DRAFT" ? (
-          <button
-            type="button"
-            disabled={busy || !hasImage}
-            onClick={() => patch({ status: "OPEN" })}
-            aria-busy={pending === "open"}
-            aria-describedby={
-              [!hasImage ? publishHintId : "", scheduledOpensInFuture ? scheduleHintId : ""]
-                .filter(Boolean)
-                .join(" ") || undefined
-            }
-            className="btn-clay-matcha items-center gap-2 text-sm"
-          >
-            {pending === "open" ? <ClaySpinner variant="onLight" /> : null}
-            {pending === "open" ? "Opening…" : "Open entries now"}
-          </button>
-        ) : null}
-        {status === "OPEN" ? (
-          <button
-            type="button"
-            disabled={busy}
-            aria-busy={pending === "close"}
-            onClick={closeLottery}
-            className="btn-clay-lemon items-center gap-2 text-sm"
-          >
-            {pending === "close" ? <ClaySpinner variant="onLight" /> : null}
-            {pending === "close" ? "Closing…" : "Close entries"}
-          </button>
-        ) : null}
-        {status === "CLOSED" && entryCount > 0 ? (
-          <button
-            type="button"
-            disabled={busy}
-            aria-busy={pending === "draw"}
-            onClick={drawWinners}
-            className="btn-clay-ube items-center gap-2 text-sm"
-          >
-            {pending === "draw" ? <ClaySpinner variant="onDark" /> : null}
-            {pending === "draw" ? "Drawing…" : `Draw ${configuredWinners} winner${configuredWinners !== 1 ? "s" : ""}`}
-          </button>
-        ) : null}
-        <a
-          href={`/api/lotteries/${lotteryId}/export?type=entries`}
-          className="btn-clay-muted no-underline"
-        >
-          Export entries CSV
-        </a>
-        {winnerCount > 0 ? (
+      <div className="clay-card-dashed flex flex-col gap-3 p-4">
+        <div>
+          <p className="clay-label">Entries &amp; exports</p>
+          <p className="mt-1 text-xs text-warm-silver">Open or close entries, draw winners, and download CSVs.</p>
+        </div>
+        <div className="flex flex-col gap-2">
+          {status === "DRAFT" ? (
+            <button
+              type="button"
+              disabled={busy || !hasImage}
+              onClick={() => patch({ status: "OPEN" })}
+              aria-busy={pending === "open"}
+              aria-describedby={
+                [!hasImage ? publishHintId : "", scheduledOpensInFuture ? scheduleHintId : ""]
+                  .filter(Boolean)
+                  .join(" ") || undefined
+              }
+              className="btn-clay-matcha w-full items-center justify-center gap-2 text-sm"
+            >
+              {pending === "open" ? <ClaySpinner variant="onLight" /> : null}
+              {pending === "open" ? "Opening…" : "Open entries now"}
+            </button>
+          ) : null}
+          {status === "OPEN" ? (
+            <button
+              type="button"
+              disabled={busy}
+              aria-busy={pending === "close"}
+              onClick={closeLottery}
+              className="btn-clay-lemon w-full items-center justify-center gap-2 text-sm"
+            >
+              {pending === "close" ? <ClaySpinner variant="onLight" /> : null}
+              {pending === "close" ? "Closing…" : "Close entries"}
+            </button>
+          ) : null}
+          {status === "CLOSED" && entryCount > 0 ? (
+            <button
+              type="button"
+              disabled={busy}
+              aria-busy={pending === "draw"}
+              onClick={drawWinners}
+              className="btn-clay-ube w-full items-center justify-center gap-2 text-sm"
+            >
+              {pending === "draw" ? <ClaySpinner variant="onDark" /> : null}
+              {pending === "draw" ? "Drawing…" : `Draw ${configuredWinners} winner${configuredWinners !== 1 ? "s" : ""}`}
+            </button>
+          ) : null}
           <a
-            href={`/api/lotteries/${lotteryId}/export?type=winners`}
-            className="btn-clay-muted no-underline"
+            href={`/api/lotteries/${lotteryId}/export?type=entries`}
+            className="btn-clay-muted no-underline flex w-full items-center justify-center"
           >
-            Export winners CSV
+            Export entries CSV
           </a>
-        ) : null}
+          {winnerCount > 0 ? (
+            <a
+              href={`/api/lotteries/${lotteryId}/export?type=winners`}
+              className="btn-clay-muted no-underline flex w-full items-center justify-center"
+            >
+              Export winners CSV
+            </a>
+          ) : null}
+        </div>
+      </div>
+      <div
+        className="rounded-[16px] border border-pomegranate-400/30 bg-pomegranate-400/[0.07] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]"
+        role="region"
+        aria-label="Delete lottery"
+      >
+        <p className="text-xs font-semibold uppercase tracking-[0.065em] text-pomegranate-500">Delete lottery</p>
+        <p className="mt-1.5 text-sm leading-snug text-warm-silver">
+          Permanently removes this lottery and related entries, winners, and audit data.{" "}
+          <span className="font-medium text-clay-black">This can&apos;t be undone.</span>
+        </p>
         <button
           type="button"
           disabled={busy}
           aria-busy={pending === "delete"}
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-pomegranate-400/40 bg-pomegranate-400/15 px-4 py-2 text-sm font-semibold tracking-tight text-pomegranate-400 shadow-[var(--shadow-ring)] transition-colors hover:bg-pomegranate-400/25 disabled:opacity-45"
+          className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-pomegranate-400/40 bg-pomegranate-400/15 px-4 py-2 text-sm font-semibold tracking-tight text-pomegranate-400 shadow-[var(--shadow-ring)] transition-colors hover:bg-pomegranate-400/25 disabled:opacity-45"
           onClick={deleteLottery}
         >
           {pending === "delete" ? <ClaySpinner /> : null}

@@ -9,6 +9,9 @@ export function NewLotteryForm() {
   const fieldsetId = useId();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [shippingPolicy, setShippingPolicy] = useState<string>("ANY");
+  const [allowedDraft, setAllowedDraft] = useState("");
+  const [blockedDraft, setBlockedDraft] = useState("");
 
   function parseCountryList(value: FormDataEntryValue | null): string[] {
     const raw = String(value ?? "")
@@ -26,11 +29,10 @@ export function NewLotteryForm() {
     const fd = new FormData(e.currentTarget);
     const opensRaw = String(fd.get("opensAt") || "");
     const closesRaw = String(fd.get("closesAt") || "");
-    const shippingPolicy = String(fd.get("shippingPolicy") || "ANY");
     const allowedCountries =
-      shippingPolicy === "ALLOW_LIST" ? parseCountryList(fd.get("allowedCountries")) : [];
+      shippingPolicy === "ALLOW_LIST" ? parseCountryList(allowedDraft) : [];
     const blockedCountries =
-      shippingPolicy === "BLOCK_LIST" ? parseCountryList(fd.get("blockedCountries")) : [];
+      shippingPolicy === "BLOCK_LIST" ? parseCountryList(blockedDraft) : [];
     const body = {
       title: String(fd.get("title")),
       description: String(fd.get("description") || ""),
@@ -129,7 +131,13 @@ export function NewLotteryForm() {
             <label htmlFor="new-shipping-policy" className="clay-label">
               Eligible countries
             </label>
-            <select id="new-shipping-policy" name="shippingPolicy" defaultValue="ANY" className="clay-input">
+            <select
+              id="new-shipping-policy"
+              name="shippingPolicy"
+              value={shippingPolicy}
+              onChange={(e) => setShippingPolicy(e.target.value)}
+              className="clay-input"
+            >
               <option value="ANY">International (any country)</option>
               <option value="US_ONLY">United States only</option>
               <option value="ALLOW_LIST">Allow only selected countries…</option>
@@ -139,32 +147,36 @@ export function NewLotteryForm() {
               Country is collected on the entry form and validated server-side.
             </p>
           </div>
-          <div className="sm:col-span-2">
-            <label htmlFor="new-allowed-countries" className="clay-label">
-              Allowed countries (ISO codes, comma or newline separated)
-            </label>
-            <textarea
-              id="new-allowed-countries"
-              name="allowedCountries"
-              rows={2}
-              placeholder="US, CA, GB"
-              className="clay-input min-h-[4rem] resize-y"
-            />
-            <p className="mt-1 text-xs text-warm-silver">Used only when policy is “Allow only selected countries”.</p>
-          </div>
-          <div className="sm:col-span-2">
-            <label htmlFor="new-blocked-countries" className="clay-label">
-              Blocked countries (ISO codes, comma or newline separated)
-            </label>
-            <textarea
-              id="new-blocked-countries"
-              name="blockedCountries"
-              rows={2}
-              placeholder="RU, BY"
-              className="clay-input min-h-[4rem] resize-y"
-            />
-            <p className="mt-1 text-xs text-warm-silver">Used only when policy is “Block certain countries”.</p>
-          </div>
+          {shippingPolicy === "ALLOW_LIST" ? (
+            <div className="sm:col-span-2">
+              <label htmlFor="new-allowed-countries" className="clay-label">
+                Allowed countries (ISO codes, comma or newline separated)
+              </label>
+              <textarea
+                id="new-allowed-countries"
+                rows={2}
+                value={allowedDraft}
+                onChange={(e) => setAllowedDraft(e.target.value)}
+                placeholder="US, CA, GB"
+                className="clay-input min-h-[4rem] resize-y"
+              />
+            </div>
+          ) : null}
+          {shippingPolicy === "BLOCK_LIST" ? (
+            <div className="sm:col-span-2">
+              <label htmlFor="new-blocked-countries" className="clay-label">
+                Blocked countries (ISO codes, comma or newline separated)
+              </label>
+              <textarea
+                id="new-blocked-countries"
+                rows={2}
+                value={blockedDraft}
+                onChange={(e) => setBlockedDraft(e.target.value)}
+                placeholder="RU, BY"
+                className="clay-input min-h-[4rem] resize-y"
+              />
+            </div>
+          ) : null}
         </div>
       </fieldset>
       <div className="grid gap-4 sm:grid-cols-2">

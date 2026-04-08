@@ -26,9 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${archivoBlack.variable} h-full`}>
-      <body className="min-h-full flex flex-col font-sans antialiased bg-cream text-clay-black">
+      <body className="flex min-h-dvh flex-col font-sans antialiased bg-cream text-clay-black">
         <div className="flex min-h-0 flex-1 flex-col">{children}</div>
-        <footer className="mx-auto w-full max-w-5xl px-4 pb-10 pt-12 text-sm text-muted sm:px-6">
+        <footer className="mx-auto w-full max-w-5xl shrink-0 px-4 pb-10 pt-12 text-sm text-muted sm:px-6">
           © {new Date().getFullYear()} Lottery Desk. All rights reserved.
         </footer>
       </body>

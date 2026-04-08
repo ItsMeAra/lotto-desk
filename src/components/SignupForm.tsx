@@ -27,8 +27,8 @@ export function SignupForm() {
     }
     const supabase = createClient();
     const { data, error } = await supabase.auth.signUp({ email, password });
-    setBusy(false);
     if (error) {
+      setBusy(false);
       setErr(error.message);
       return;
     }
@@ -37,6 +37,7 @@ export function SignupForm() {
       router.refresh();
       return;
     }
+    setBusy(false);
     setInfo("Check your email to confirm your account, then sign in.");
   }
 
