@@ -15,8 +15,9 @@ const archivoBlack = Archivo_Black({
 });
 
 export const metadata: Metadata = {
-  title: "Lottery Desk",
-  description: "Run lotteries for exclusive drops—entries, deduplication, draws, and CSV export.",
+  title: "Rafflehaus",
+  description:
+    "Rafflehaus — run lotteries for exclusive drops: entries, deduplication, draws, and CSV export.",
 };
 
 export default function RootLayout({
@@ -29,7 +30,7 @@ export default function RootLayout({
       <body className="flex min-h-dvh flex-col font-sans antialiased bg-cream text-clay-black">
         <div className="flex min-h-0 flex-1 flex-col">{children}</div>
         <footer className="mx-auto w-full max-w-5xl shrink-0 px-4 pb-10 pt-12 text-sm text-muted sm:px-6">
-          © {new Date().getFullYear()} Lottery Desk. All rights reserved.
+          © {new Date().getFullYear()} Rafflehaus. All rights reserved.
         </footer>
       </body>
     </html>

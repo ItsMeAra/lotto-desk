@@ -40,7 +40,7 @@
   }
 }
 
-/* Lottery Desk — Wise-inspired fintech theme (see /DESIGN.md). Inter UI + Archivo Black display. */
+/* Rafflehaus — Wise-inspired fintech theme (see /DESIGN.md). Inter UI + Archivo Black display. */
 @theme inline {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-archivo), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
