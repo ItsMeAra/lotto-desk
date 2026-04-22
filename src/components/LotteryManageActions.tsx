@@ -40,8 +40,9 @@ export function LotteryManageActions({
   scheduledOpensInFuture,
 }: Props) {
   const router = useRouter();
-  const [pending, setPending] = useState<null | "open" | "close" | "draw" | "delete">(null);
+  const [pending, setPending] = useState<null | "open" | "close" | "draw" | "delete" | "purge">(null);
   const [err, setErr] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [drawCelebration, setDrawCelebration] = useState(false);
   const celebrationCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -80,6 +81,7 @@ export function LotteryManageActions({
   async function patch(body: object) {
     setPending("open");
     setErr(null);
+    setNotice(null);
     const res = await fetch(`/api/lotteries/${lotteryId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -97,6 +99,7 @@ export function LotteryManageActions({
   async function closeLottery() {
     setPending("close");
     setErr(null);
+    setNotice(null);
     const res = await fetch(`/api/lotteries/${lotteryId}/close`, { method: "POST" });
     const data = await res.json().catch(() => ({}));
     setPending(null);
@@ -111,6 +114,7 @@ export function LotteryManageActions({
     if (!confirm(`Pick up to ${configuredWinners} winner(s) from ${entryCount} entries?`)) return;
     setPending("draw");
     setErr(null);
+    setNotice(null);
     const res = await fetch(`/api/lotteries/${lotteryId}/draw`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -144,6 +148,7 @@ export function LotteryManageActions({
     }
     setPending("delete");
     setErr(null);
+    setNotice(null);
     const res = await fetch(`/api/lotteries/${lotteryId}`, { method: "DELETE" });
     const data = await res.json().catch(() => ({}));
     setPending(null);
@@ -161,6 +166,37 @@ export function LotteryManageActions({
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     });
+  }
+
+  async function purgeEntrantData() {
+    if (
+      !confirm(
+        "Delete entrant data for this lottery? This removes entries, winners, and blocked duplicate attempts. This cannot be undone."
+      )
+    ) {
+      return;
+    }
+    setPending("purge");
+    setErr(null);
+    setNotice(null);
+    const res = await fetch(`/api/lotteries/${lotteryId}/entries`, { method: "DELETE" });
+    const data = (await res.json().catch(() => ({}))) as {
+      error?: string;
+      summary?: { entriesDeleted: number; winnersDeleted: number; blockedAttemptsDeleted: number };
+    };
+    setPending(null);
+    if (!res.ok) {
+      setErr(apiErrorMessage(data));
+      return;
+    }
+    if (data.summary) {
+      setNotice(
+        `Deleted ${data.summary.entriesDeleted} entries, ${data.summary.winnersDeleted} winners, and ${data.summary.blockedAttemptsDeleted} blocked attempts.`
+      );
+    } else {
+      setNotice("Entrant data deleted.");
+    }
+    router.refresh();
   }
 
   const publishHintId = "lottery-publish-image-hint";
@@ -250,6 +286,11 @@ export function LotteryManageActions({
           {err}
         </p>
       ) : null}
+      {notice ? (
+        <p className="text-sm font-medium text-matcha-800" role="status">
+          {notice}
+        </p>
+      ) : null}
       {status === "DRAFT" && scheduledOpensInFuture && opensAt ? (
         <p id={scheduleHintId} className="text-sm text-warm-silver">
           Scheduled start: {new Date(opensAt).toLocaleString()}. Entries open automatically at that time once an image
@@ -321,6 +362,18 @@ export function LotteryManageActions({
             >
               Export winners CSV
             </a>
+          ) : null}
+          {status === "DRAWN" ? (
+            <button
+              type="button"
+              disabled={busy || entryCount === 0}
+              aria-busy={pending === "purge"}
+              onClick={purgeEntrantData}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-pomegranate-400/40 bg-pomegranate-400/15 px-4 py-2 text-sm font-semibold tracking-tight text-pomegranate-400 shadow-[var(--shadow-ring)] transition-colors hover:bg-pomegranate-400/25 disabled:opacity-45"
+            >
+              {pending === "purge" ? <ClaySpinner /> : null}
+              {pending === "purge" ? "Deleting entrant data…" : "Delete this lottery entrant data"}
+            </button>
           ) : null}
         </div>
       </div>

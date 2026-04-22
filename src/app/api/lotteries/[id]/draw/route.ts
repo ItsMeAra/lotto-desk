@@ -71,7 +71,7 @@ export async function POST(request: Request, ctx: { params: Promise<{ id: string
 
   await logAudit(profile.id, "lottery.draw", {
     lotteryId: id,
-    metadata: { winnerCount: pick, entryIds: chosen },
+    metadata: { winnerCount: pick },
   });
 
   const winners = await prisma.winner.findMany({
