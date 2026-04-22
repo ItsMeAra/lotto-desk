@@ -190,7 +190,7 @@ export function PublicEntryForm({
             placeholder="username (no @)"
             className="clay-input"
           />
-          <p className="mt-2 text-sm text-warm-silver">Just the username (example: <span className="font-mono">artistname</span>).</p>
+          <p className="mt-2 text-sm text-warm-silver">Just your username (example: <span className="font-mono">MyInstaName</span>).</p>
         </div>
       ) : null}
       {requirePaypal ? (
